@@ -26,8 +26,8 @@ int main()
 
     while (fscanf(arqIN, "%d%d", &num1, &num2) != EOF)
     {
-        intToBignum(bigNum1, num1);
-        intToBignum(bignum2, num2);
+        bigNum1 = intToBignum(num1);
+        bignum2 = intToBignum(num2);
     }
 
     return 1;

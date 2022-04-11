@@ -6,7 +6,6 @@
 struct elemento
 {
     struct Lista *proximo;
-    struct Lista *anterior;
     int num;
 };
 
@@ -39,7 +38,7 @@ void destruir(Lista *bigNum)
     }
 }
 
-void intToBignum(Lista *bigNum, int num)
+Lista *intToBignum(int num)
 {
     int casas = 1;
     int numClone;
@@ -61,4 +60,47 @@ void intToBignum(Lista *bigNum, int num)
         no = no->proximo;
     }
     no->proximo = NULL;
+    return no;
+}
+
+Lista *somar(Elem *bigNumA, Elem *bigNumB)
+{
+    Elem *result = (Elem *)malloc(sizeof(Elem));
+    int carrega = 0;
+
+    while (bigNumA != NULL || bigNumB != NULL)
+    {
+        result->num = carrega;
+
+        if (bigNumA == NULL) // se não tiver número nessa casa colocamos 0
+        {
+            bigNumA->num = 0;
+        }
+
+        if (bigNumB == NULL) // se não tiver número nessa casa colocamos 0
+        {
+            bigNumB->num = 0;
+        }
+
+        if ((result->num + bigNumA->num + bigNumB->num) >= 10) // se a soma for maior que 10 fazemos o "vai um"
+        {
+            result->num += (bigNumA->num + bigNumB->num) - 10;
+            carrega = 1;
+        }
+        else
+        {
+            result->num += bigNumA->num + bigNumB->num;
+            carrega = 0;
+        }
+
+        result = result->proximo;
+        bigNumA = bigNumA->proximo;
+        bigNumB = bigNumB->proximo;
+    }
+
+    return result;
+}
+
+Lista *subtrair(Elem *bigNumA, Elem *bigNumB)
+{
 }

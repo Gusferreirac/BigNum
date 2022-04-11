@@ -1,10 +1,10 @@
 typedef struct elemento *Lista;
 
 Lista *criar();
-Lista *somar(Lista *bigNumA, Lista *bigNumB);
-Lista *subtrair(Lista *bigNumA, Lista *bigNumB);
+Lista *somar(Elem *bigNumA, Elem *bigNumB);
+Lista *subtrair(Elem *bigNumA, Elem *bigNumB);
 Lista *multiplicar(Lista *bigNumA, Lista *bigNumB);
 Lista *dividir(Lista *numerador, Lista *divisor);
+Lista *intToBignum(int num);
 void destruir(Lista *bigNum);
 void imprimir(Lista *bigNum);
-void intToBignum(Lista *bigNum, int num);
