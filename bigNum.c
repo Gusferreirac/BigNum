@@ -33,15 +33,18 @@ void destruir(Lista *bigNum)
         {
             no = *bigNum;
             *bigNum = (*bigNum)->proximo;
-            free(no); //libera todos os nos primeiro
+            free(no); // libera todos os nos primeiro
         }
-        free(bigNum); //depois libera a lista
+        free(bigNum); // depois libera a lista
     }
 }
 
 void intToBignum(Lista *bigNum, int num)
 {
-    int i, casas = 1;
+    int casas = 1;
+    int numClone;
+
+    numClone = num;
 
     Elem *no = (Elem *)malloc(sizeof(Elem));
 
@@ -52,9 +55,10 @@ void intToBignum(Lista *bigNum, int num)
 
     while (casas != 0)
     {
-        no->num = num / pow(10, (casas - 1));
+        no->num = numClone / pow(10, (casas - 1));
+        numClone = numClone - no->num * pow(10, (casas - 1));
         casas--;
-        no->proximo = NULL;
         no = no->proximo;
     }
+    no->proximo = NULL;
 }
