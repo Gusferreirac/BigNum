@@ -103,4 +103,69 @@ Lista *somar(Elem *bigNumA, Elem *bigNumB)
 
 Lista *subtrair(Elem *bigNumA, Elem *bigNumB)
 {
+    Elem *result = (Elem *)malloc(sizeof(Elem));
+    int carrega = 0;
+
+    while (bigNumA != NULL || bigNumB != NULL)
+    {
+
+        if (bigNumA == NULL) // se o número do qual estamos subtraindo tiver chegado ao fim apenas iremos copiar o valor do subtraendo no resultado
+        {
+            if (bigNumB->proximo == NULL)
+            {
+                result->num = bigNumB->num * (-1); // se for o ultimo numero ele recebera o valor negativo
+            }
+            else
+            {
+                result->num = bigNumB->num;
+            }
+        }
+        else if (bigNumB == NULL)
+        {
+            result->num = bigNumA->num;
+        }
+        else
+        {
+            if ((bigNumA->num - bigNumB->num) < 0) // se a subtracao for menor que zero avançamos nas casa decimais e encontramos o primeiro valor > 0 e tiramos um dele e pegamos "emprestado"
+            {
+                Elem *aux = (Elem *)malloc(sizeof(Elem));
+                aux = bigNumA;
+                while (aux != NULL)
+                {
+                    if (aux->num > 0)
+                    {
+                        aux->num--;
+                        carrega = 1;
+                        break;
+                    }
+                    aux = aux->proximo;
+                }
+                if (carrega == 1)
+                {
+                    result->num = (bigNumA->num + 10) - bigNumB->num;
+                }
+                else
+                {
+                    if (bigNumB->proximo == NULL)
+                    {
+                        result->num = (bigNumA->num - bigNumB->num);
+                    }
+                    else
+                    {
+                        result->num = (bigNumA->num - bigNumB->num) * (-1);
+                    }
+                }
+            }
+            else
+            {
+                result->num = bigNumA->num - bigNumB->num;
+            }
+        }
+
+        result = result->proximo;
+        bigNumA = bigNumA->proximo;
+        bigNumB = bigNumB->proximo;
+    }
+
+    return result;
 }
