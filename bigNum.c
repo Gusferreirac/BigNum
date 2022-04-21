@@ -75,20 +75,20 @@ void somar(BigNum *bigNumAHead, BigNum *bigNumBHead, BigNum **res, Lista *list)
     bigNumB = bigNumBHead;
 
     result->anterior = NULL;
-    while (bigNumA != NULL || bigNumB != NULL)
+    while (bigNumA != NULL || bigNumB != NULL) // A soma somente para quando os dois numeros acabam
     {
-        result->num = carrega;
+        result->num = carrega; // A variavel carrega contem o "vai um" da iteração anterior
 
         if (bigNumA != NULL && bigNumB != NULL)
         {
             if ((result->num + bigNumA->num + bigNumB->num) >= 10) // se a soma for maior que 10 fazemos o "vai um"
             {
-                result->num += (bigNumA->num + bigNumB->num) - 10;
+                result->num += (bigNumA->num + bigNumB->num) - 10; // vai um e deixa o resto
                 carrega = 1;
             }
             else
             {
-                result->num += bigNumA->num + bigNumB->num;
+                result->num += bigNumA->num + bigNumB->num; // se a soma nao explode basta fazer normalmente
                 carrega = 0;
             }
             bigNumA = bigNumA->proximo;
@@ -96,22 +96,22 @@ void somar(BigNum *bigNumAHead, BigNum *bigNumBHead, BigNum **res, Lista *list)
         }
         else
         {
-            if (bigNumA == NULL)
+            if (bigNumA == NULL) // se um dos numeros chegar ao fim o resultado recebera o outro mais o "vai um" se tiver
             {
-                if ((result->num + bigNumB->num) >= 10)
+                if ((result->num + bigNumB->num) >= 10) // se a soma do numero restante com o vai um explodir fazemos o vai um de novo e deixamos o resto
                 {
                     result->num += bigNumB->num - 10;
                     carrega = 1;
                 }
                 else
                 {
-                    result->num += bigNumB->num;
+                    result->num += bigNumB->num; // caso nao basta somar normal
                     carrega = 0;
                 }
 
-                bigNumB = bigNumB->proximo;
+                bigNumB = bigNumB->proximo; // como o numero A ja terminou somente percorremos o numero B
             }
-            else
+            else // o mesmo processo visto acima porem desta vez o numero que sobrou foi o A
             {
                 if ((result->num + bigNumA->num) >= 10)
                 {
@@ -130,12 +130,16 @@ void somar(BigNum *bigNumAHead, BigNum *bigNumBHead, BigNum **res, Lista *list)
         result->proximo = (BigNum *)malloc(sizeof(BigNum));
         result->proximo->anterior = result;
         result = result->proximo;
-        if (bigNumA == NULL && bigNumB == NULL)
+
+        if (bigNumA == NULL && bigNumB == NULL) // se os dois numeros chegaram ao fim a ultima casa do resultado recebe o ultimo vai um
         {
-            result->num = carrega;
+            result->num = carrega; // se a ultima soma explodiu a ultima casa do resultado recebera 1 caso nao recebera 0 o que nao muda o resultado (0 a esq.)
         }
     }
-
+    if (result->num == 0)
+    {
+        result = result->anterior; // tirando o zero a esquerda
+    }
     result->proximo = NULL;
     list->ultimo = result;
 }
