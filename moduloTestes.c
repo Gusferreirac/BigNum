@@ -5,27 +5,30 @@
 int main()
 {
     BigNum *bigNum1, *bigNum2, *soma;
-    Lista *controller;
+    Lista *controllerA, *controllerB, *controllerC;
 
-    controller = (Lista *)malloc(sizeof(Lista));
+    controllerA = (Lista *)malloc(sizeof(Lista));
+    controllerB = (Lista *)malloc(sizeof(Lista));
+    controllerC = (Lista *)malloc(sizeof(Lista));
     int a, b;
 
     bigNum1 = criar();
-    controller->primeiro = bigNum1;
-    controller->ultimo = bigNum1;
-    // bigNum2 = criar();
-    // soma = criar();
+    controllerA->primeiro = bigNum1;
 
-    scanf("%d", &a);
+    bigNum2 = criar();
+    controllerB->primeiro = bigNum2;
 
-    intToBignum(a, bigNum1, controller);
-    imprimeBignum(controller->ultimo);
-    //   imprimir(controller->ultimo);
-    //   intToBignum(b, bigNum2);
+    soma = criar();
+    controllerC->primeiro = soma;
 
-    // soma = somar(bigNum1, bigNum2);
+    scanf("%d %d", &a, &b);
 
-    // imprimeBignum(soma);
+    intToBignum(a, bigNum1, controllerA);
+    intToBignum(b, bigNum2, controllerB);
+
+    somar(controllerA->primeiro->proximo, controllerB->primeiro->proximo, soma, controllerC);
+
+    imprimeBignum(controllerC->ultimo);
 
     system("pause");
     return 0;

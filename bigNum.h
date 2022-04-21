@@ -13,7 +13,7 @@ typedef struct lista
 } Lista;
 
 BigNum *criar();
-BigNum *somar(BigNum *bigNumA, BigNum *bigNumB);
+void somar(BigNum *bigNumAHead, BigNum *bigNumBHead, BigNum **res, Lista *list);
 BigNum *subtrair(BigNum *bigNumA, BigNum *bigNumB);
 BigNum *multiplicar(BigNum *bigNumA, BigNum *bigNumB);
 BigNum *dividir(BigNum *numerador, BigNum *divisor);

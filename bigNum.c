@@ -59,46 +59,85 @@ void *intToBignum(int num, BigNum **head, Lista *list)
         }
     }
 
-    list->ultimo = no;
     no->proximo = NULL;
+    list->ultimo = no;
 }
 
-BigNum *somar(BigNum *bigNumA, BigNum *bigNumB)
+void somar(BigNum *bigNumAHead, BigNum *bigNumBHead, BigNum **res, Lista *list)
 {
     BigNum *result = (BigNum *)malloc(sizeof(BigNum));
+    BigNum *bigNumA = (BigNum *)malloc(sizeof(BigNum));
+    BigNum *bigNumB = (BigNum *)malloc(sizeof(BigNum));
     int carrega = 0;
 
+    *res = result;
+    bigNumA = bigNumAHead;
+    bigNumB = bigNumBHead;
+
+    result->anterior = NULL;
     while (bigNumA != NULL || bigNumB != NULL)
     {
         result->num = carrega;
 
-        if (bigNumA == NULL) // se não tiver número nessa casa colocamos 0
+        if (bigNumA != NULL && bigNumB != NULL)
         {
-            bigNumA->num = 0;
-        }
-
-        if (bigNumB == NULL) // se não tiver número nessa casa colocamos 0
-        {
-            bigNumB->num = 0;
-        }
-
-        if ((result->num + bigNumA->num + bigNumB->num) >= 10) // se a soma for maior que 10 fazemos o "vai um"
-        {
-            result->num += (bigNumA->num + bigNumB->num) - 10;
-            carrega = 1;
+            if ((result->num + bigNumA->num + bigNumB->num) >= 10) // se a soma for maior que 10 fazemos o "vai um"
+            {
+                result->num += (bigNumA->num + bigNumB->num) - 10;
+                carrega = 1;
+            }
+            else
+            {
+                result->num += bigNumA->num + bigNumB->num;
+                carrega = 0;
+            }
+            bigNumA = bigNumA->proximo;
+            bigNumB = bigNumB->proximo;
         }
         else
         {
-            result->num += bigNumA->num + bigNumB->num;
-            carrega = 0;
-        }
+            if (bigNumA == NULL)
+            {
+                if ((result->num + bigNumB->num) >= 10)
+                {
+                    result->num += bigNumB->num - 10;
+                    carrega = 1;
+                }
+                else
+                {
+                    result->num += bigNumB->num;
+                    carrega = 0;
+                }
 
+                bigNumB = bigNumB->proximo;
+            }
+            else
+            {
+                if ((result->num + bigNumA->num) >= 10)
+                {
+                    result->num += bigNumA->num - 10;
+                    carrega = 1;
+                }
+                else
+                {
+                    result->num += bigNumA->num;
+                    carrega = 0;
+                }
+
+                bigNumA = bigNumA->proximo;
+            }
+        }
+        result->proximo = (BigNum *)malloc(sizeof(BigNum));
+        result->proximo->anterior = result;
         result = result->proximo;
-        bigNumA = bigNumA->proximo;
-        bigNumB = bigNumB->proximo;
+        if (bigNumA == NULL && bigNumB == NULL)
+        {
+            result->num = carrega;
+        }
     }
 
-    return result;
+    result->proximo = NULL;
+    list->ultimo = result;
 }
 
 BigNum *subtrair(BigNum *bigNumA, BigNum *bigNumB)
@@ -223,7 +262,7 @@ BigNum *multiplicar(BigNum *bigNumA, BigNum *bigNumB)
             }
         }
         salta++;
-        result = somar(parcialResult, result);
+        // result = somar(parcialResult, result);
         destruir(parcialResult);
         bigNumA = bigNumA->proximo;
     }
