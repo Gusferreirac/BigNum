@@ -23,10 +23,10 @@ int main()
 
     scanf("%d %d", &a, &b);
 
-    intToBignum(a, bigNum1, controllerA);
-    intToBignum(b, bigNum2, controllerB);
+    controllerA->casas = intToBignum(a, bigNum1, controllerA);
+    controllerB->casas = intToBignum(b, bigNum2, controllerB);
 
-    somar(controllerA->primeiro->proximo, controllerB->primeiro->proximo, soma, controllerC);
+    subtrair(controllerA, controllerB, soma, controllerC);
 
     imprimeBignum(controllerC->ultimo);
 

@@ -29,7 +29,7 @@ void destruir(BigNum *bigNum)
     }
 }
 
-void *intToBignum(int num, BigNum **head, Lista *list)
+int *intToBignum(int num, BigNum **head, Lista *list)
 {
     int casas = 1;
     int tam, i = 0;
@@ -61,6 +61,7 @@ void *intToBignum(int num, BigNum **head, Lista *list)
 
     no->proximo = NULL;
     list->ultimo = no;
+    return tam;
 }
 
 void somar(BigNum *bigNumAHead, BigNum *bigNumBHead, BigNum **res, Lista *list)
@@ -144,73 +145,108 @@ void somar(BigNum *bigNumAHead, BigNum *bigNumBHead, BigNum **res, Lista *list)
     list->ultimo = result;
 }
 
-BigNum *subtrair(BigNum *bigNumA, BigNum *bigNumB)
+void subtrair(Lista *bigNumAHead, Lista *bigNumBHead, BigNum **res, Lista *list)
 {
     BigNum *result = (BigNum *)malloc(sizeof(BigNum));
+    BigNum *bigNumA = (BigNum *)malloc(sizeof(BigNum));
+    BigNum *bigNumB = (BigNum *)malloc(sizeof(BigNum));
+    BigNum *aux = (BigNum *)malloc(sizeof(BigNum));
+
     int carrega = 0;
+    int negative = 0;
 
-    while (bigNumA != NULL || bigNumB != NULL)
+    *res = result;
+    if (bigNumAHead->casas < bigNumBHead->casas)
     {
+        negative = 1;
+    }
+    else if (bigNumAHead->casas == bigNumBHead->casas)
+    {
+        if (bigNumAHead->ultimo->num < bigNumBHead->ultimo->num)
+        {
+            negative = 1;
+        }
+        else if (bigNumAHead->ultimo->num == bigNumBHead->ultimo->num)
+        {
+            BigNum *auxA = (BigNum *)malloc(sizeof(BigNum));
+            BigNum *auxB = (BigNum *)malloc(sizeof(BigNum));
 
-        if (bigNumA == NULL) // se o número do qual estamos subtraindo tiver chegado ao fim apenas iremos copiar o valor do subtraendo no resultado
-        {
-            if (bigNumB->proximo == NULL)
+            auxA = bigNumAHead->ultimo;
+            auxB = bigNumBHead->ultimo;
+
+            while (auxA != NULL && auxB != NULL)
             {
-                result->num = bigNumB->num * (-1); // se for o ultimo numero ele recebera o valor negativo
-            }
-            else
-            {
-                result->num = bigNumB->num;
+                if (auxA->num < auxB->num)
+                {
+                    negative = 1;
+                    break;
+                }
+                auxA = auxA->anterior;
+                auxB = auxB->anterior;
             }
         }
-        else if (bigNumB == NULL)
+    }
+
+    if (negative == 1)
+    {
+        bigNumA = bigNumBHead->primeiro->proximo;
+        bigNumB = bigNumAHead->primeiro->proximo;
+    }
+    else
+    {
+        bigNumA = bigNumAHead->primeiro->proximo;
+        bigNumB = bigNumBHead->primeiro->proximo;
+    }
+
+    result->anterior = NULL;
+
+    while (bigNumA != NULL || bigNumB != NULL) // A soma somente para quando os dois numeros acabam
+    {
+        if (bigNumB != NULL)
         {
-            result->num = bigNumA->num;
-        }
-        else
-        {
-            if ((bigNumA->num - bigNumB->num) < 0) // se a subtracao for menor que zero avançamos nas casa decimais e encontramos o primeiro valor > 0 e tiramos um dele e pegamos "emprestado"
+            if ((bigNumA->num - bigNumB->num) < 0) // se a soma for maior que 10 fazemos o "vai um"
             {
-                BigNum *aux = (BigNum *)malloc(sizeof(BigNum));
-                aux = bigNumA;
+                aux = bigNumA->proximo;
                 while (aux != NULL)
                 {
                     if (aux->num > 0)
                     {
                         aux->num--;
-                        carrega = 1;
                         break;
-                    }
-                    aux = aux->proximo;
-                }
-                if (carrega == 1)
-                {
-                    result->num = (bigNumA->num + 10) - bigNumB->num;
-                }
-                else
-                {
-                    if (bigNumB->proximo == NULL)
-                    {
-                        result->num = (bigNumA->num - bigNumB->num);
                     }
                     else
                     {
-                        result->num = (bigNumA->num - bigNumB->num) * (-1);
+                        aux->num = 9;
                     }
+                    aux = aux->proximo;
                 }
+
+                result->num = (bigNumA->num + 10) - bigNumB->num;
             }
             else
             {
-                result->num = bigNumA->num - bigNumB->num;
+                result->num = bigNumA->num - bigNumB->num; // se a soma nao explode basta fazer normalmente
             }
+            bigNumA = bigNumA->proximo;
+            bigNumB = bigNumB->proximo;
         }
-
+        else
+        {
+            result->num = bigNumA->num;
+            bigNumA = bigNumA->proximo;
+        }
+        result->proximo = (BigNum *)malloc(sizeof(BigNum));
+        result->proximo->anterior = result;
         result = result->proximo;
-        bigNumA = bigNumA->proximo;
-        bigNumB = bigNumB->proximo;
     }
 
-    return result;
+    result = result->anterior;
+    result->proximo = NULL;
+    removerZeros(result, list);
+    if (negative == 1)
+    {
+        list->ultimo->num = list->ultimo->num * -1;
+    }
 }
 
 BigNum *multiplicar(BigNum *bigNumA, BigNum *bigNumB)
@@ -279,7 +315,22 @@ void imprimeBignum(BigNum *Num)
     printf("\n");
     while (no != NULL)
     {
-        printf("%d", no->num);
+        printf("%d ", no->num);
         no = no->anterior;
     }
+}
+
+void removerZeros(BigNum *bigNum, Lista *controller)
+{
+    while (bigNum != NULL)
+    {
+        if (bigNum->anterior == NULL || bigNum->num != 0)
+        {
+            bigNum->proximo = NULL;
+            break;
+        }
+        bigNum = bigNum->anterior;
+        free(bigNum->proximo);
+    }
+    controller->ultimo = bigNum;
 }
