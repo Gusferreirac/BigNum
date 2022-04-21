@@ -1,71 +1,71 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <string.h>
 #include "bigNum.h"
 
-struct elemento
+BigNum *criar()
 {
-    struct Lista *proximo;
-    int num;
-};
+    BigNum *bigNum = (BigNum *)malloc(sizeof(BigNum));
 
-typedef struct elemento Elem;
-
-Lista *criar()
-{
-    Lista *li = (Lista *)malloc(sizeof(Lista));
-
-    if (li != NULL)
-    {
-        *li = NULL;
-    }
-
-    return li;
+    bigNum->num = 0;
+    bigNum->anterior = NULL;
+    bigNum->proximo = NULL;
+    return bigNum;
 }
 
-void destruir(Lista *bigNum)
+void destruir(BigNum *bigNum)
 {
     if (bigNum != NULL)
     {
-        Elem *no;
-        while ((*bigNum) != NULL)
+        BigNum *no;
+        while (bigNum != NULL)
         {
-            no = *bigNum;
-            *bigNum = (*bigNum)->proximo;
+            no = bigNum;
+            bigNum = bigNum->proximo;
             free(no); // libera todos os nos primeiro
         }
-        free(bigNum); // depois libera a lista
+        free(bigNum); // depois libera a BigNum
     }
 }
 
-Lista *intToBignum(int num)
+void *intToBignum(int num, BigNum **head, Lista *list)
 {
     int casas = 1;
+    int tam, i = 0;
     int numClone;
+    char buffer[5];
 
-    numClone = num;
+    BigNum *no = (BigNum *)malloc(sizeof(BigNum));
+    BigNum *aux = (BigNum *)malloc(sizeof(BigNum));
 
-    Elem *no = (Elem *)malloc(sizeof(Elem));
+    *head = no;
 
-    while ((num = num / 10) > 0)
+    no->anterior = NULL;
+
+    itoa(num, buffer, 10);
+    strrev(buffer);
+    tam = strlen(buffer);
+
+    for (i = 0; i < tam; i++)
     {
-        casas++;
+        no->num = buffer[i] - '0';
+        if (i != (tam - 1))
+        {
+            no->proximo = (BigNum *)malloc(sizeof(BigNum));
+            aux = no;
+            no = no->proximo;
+            no->anterior = aux;
+        }
     }
 
-    while (casas != 0)
-    {
-        no->num = numClone / pow(10, (casas - 1));
-        numClone = numClone - no->num * pow(10, (casas - 1));
-        casas--;
-        no = no->proximo;
-    }
+    list->ultimo = no;
     no->proximo = NULL;
-    return no;
 }
 
-Lista *somar(Elem *bigNumA, Elem *bigNumB)
+BigNum *somar(BigNum *bigNumA, BigNum *bigNumB)
 {
-    Elem *result = (Elem *)malloc(sizeof(Elem));
+    BigNum *result = (BigNum *)malloc(sizeof(BigNum));
     int carrega = 0;
 
     while (bigNumA != NULL || bigNumB != NULL)
@@ -101,9 +101,9 @@ Lista *somar(Elem *bigNumA, Elem *bigNumB)
     return result;
 }
 
-Lista *subtrair(Elem *bigNumA, Elem *bigNumB)
+BigNum *subtrair(BigNum *bigNumA, BigNum *bigNumB)
 {
-    Elem *result = (Elem *)malloc(sizeof(Elem));
+    BigNum *result = (BigNum *)malloc(sizeof(BigNum));
     int carrega = 0;
 
     while (bigNumA != NULL || bigNumB != NULL)
@@ -128,7 +128,7 @@ Lista *subtrair(Elem *bigNumA, Elem *bigNumB)
         {
             if ((bigNumA->num - bigNumB->num) < 0) // se a subtracao for menor que zero avançamos nas casa decimais e encontramos o primeiro valor > 0 e tiramos um dele e pegamos "emprestado"
             {
-                Elem *aux = (Elem *)malloc(sizeof(Elem));
+                BigNum *aux = (BigNum *)malloc(sizeof(BigNum));
                 aux = bigNumA;
                 while (aux != NULL)
                 {
@@ -168,4 +168,75 @@ Lista *subtrair(Elem *bigNumA, Elem *bigNumB)
     }
 
     return result;
+}
+
+BigNum *multiplicar(BigNum *bigNumA, BigNum *bigNumB)
+{
+    BigNum *result = (BigNum *)malloc(sizeof(BigNum));
+    result->num = 0;
+
+    int carrega = 0;
+    int salta = 0;
+    int i = 0;
+
+    while (bigNumA != NULL)
+    {
+        BigNum *parcialResult = (BigNum *)malloc(sizeof(BigNum));
+        while (bigNumB != NULL)
+        {
+            if (salta > 0)
+            {
+                for (i = 0; i < salta; i++)
+                {
+                    parcialResult->num = 0;
+                    parcialResult->proximo;
+                }
+            }
+            else
+            {
+                if ((bigNumB->num + carrega) >= 10)
+                {
+                    bigNumB->proximo->num = (bigNumB->num + carrega) / 10; //
+                }
+                else
+                {
+                    bigNumB->num += carrega;
+                }
+
+                if (bigNumA->num == 0)
+                {
+                    break;
+                }
+
+                if (bigNumB->num * bigNumA->num >= 10) // verifica se a multplicação é maior que 10
+                {
+                    carrega = (bigNumB->num * bigNumA->num) / 10;
+                    parcialResult->num += (bigNumB->num * bigNumA->num) % 10;
+                }
+                else
+                {
+                    carrega = 0;
+                    parcialResult->num += bigNumB->num * bigNumA->num;
+                }
+                bigNumB = bigNumB->proximo;
+                parcialResult = parcialResult->proximo;
+            }
+        }
+        salta++;
+        result = somar(parcialResult, result);
+        destruir(parcialResult);
+        bigNumA = bigNumA->proximo;
+    }
+    return result;
+}
+
+void imprimeBignum(BigNum *Num)
+{
+    BigNum *no = Num;
+    printf("\n");
+    while (no != NULL)
+    {
+        printf("%d", no->num);
+        no = no->anterior;
+    }
 }

@@ -1,10 +1,23 @@
-typedef struct elemento *Lista;
+typedef struct bigNum
+{
+    struct bigNum *proximo;
+    struct bigNum *anterior;
+    struct bigNum *ultimo;
+    int num;
+} BigNum;
 
-Lista *criar();
-Lista *somar(Elem *bigNumA, Elem *bigNumB);
-Lista *subtrair(Elem *bigNumA, Elem *bigNumB);
-Lista *multiplicar(Lista *bigNumA, Lista *bigNumB);
-Lista *dividir(Lista *numerador, Lista *divisor);
-Lista *intToBignum(int num);
-void destruir(Lista *bigNum);
-void imprimir(Lista *bigNum);
+typedef struct lista
+{
+    struct bigNum *primeiro;
+    struct bigNum *ultimo;
+} Lista;
+
+BigNum *criar();
+BigNum *somar(BigNum *bigNumA, BigNum *bigNumB);
+BigNum *subtrair(BigNum *bigNumA, BigNum *bigNumB);
+BigNum *multiplicar(BigNum *bigNumA, BigNum *bigNumB);
+BigNum *dividir(BigNum *numerador, BigNum *divisor);
+void *intToBignum(int num, BigNum **head, Lista *list);
+void destruir(BigNum *bigNum);
+void imprimir(BigNum *bigNum);
+void imprimeBignum(BigNum *Num);
