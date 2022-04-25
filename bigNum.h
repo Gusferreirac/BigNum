@@ -16,7 +16,7 @@ typedef struct lista
 BigNum *criar();
 void somar(BigNum *bigNumAHead, BigNum *bigNumBHead, BigNum **res, Lista *list);
 void subtrair(Lista *bigNumAHead, Lista *bigNumBHead, BigNum **res, Lista *list);
-BigNum *multiplicar(BigNum *bigNumA, BigNum *bigNumB);
+void multiplicar(Lista *bigNumAHead, Lista *bigNumBHead, BigNum **res, Lista *list);
 BigNum *dividir(BigNum *numerador, BigNum *divisor);
 int *intToBignum(int num, BigNum **head, Lista *list);
 void destruir(BigNum *bigNum);

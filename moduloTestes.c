@@ -26,7 +26,7 @@ int main()
     controllerA->casas = intToBignum(a, bigNum1, controllerA);
     controllerB->casas = intToBignum(b, bigNum2, controllerB);
 
-    subtrair(controllerA, controllerB, soma, controllerC);
+    multiplicar(controllerA, controllerB, soma, controllerC);
 
     imprimeBignum(controllerC->ultimo);
 

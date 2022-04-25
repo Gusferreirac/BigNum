@@ -76,10 +76,10 @@ void somar(BigNum *bigNumAHead, BigNum *bigNumBHead, BigNum **res, Lista *list)
     bigNumB = bigNumBHead;
 
     result->anterior = NULL;
+    list->primeiro = result;
     while (bigNumA != NULL || bigNumB != NULL) // A soma somente para quando os dois numeros acabam
     {
         result->num = carrega; // A variavel carrega contem o "vai um" da iteração anterior
-
         if (bigNumA != NULL && bigNumB != NULL)
         {
             if ((result->num + bigNumA->num + bigNumB->num) >= 10) // se a soma for maior que 10 fazemos o "vai um"
@@ -156,6 +156,8 @@ void subtrair(Lista *bigNumAHead, Lista *bigNumBHead, BigNum **res, Lista *list)
     int negative = 0;
 
     *res = result;
+
+    // A primeira coisa que devemos fazer é verificar se o subtrator é maior ou menor que o subtraendo
     if (bigNumAHead->casas < bigNumBHead->casas)
     {
         negative = 1;
@@ -186,7 +188,10 @@ void subtrair(Lista *bigNumAHead, Lista *bigNumBHead, BigNum **res, Lista *list)
             }
         }
     }
+    // fim da verificação
 
+    // se o subtrador realmente for maior que o subtraendo trocamos os dois e deixamos o negative como 1, que significa que o resultado sera negativo
+    // ex: 10 - 30 = (30 - 10)*(-1)
     if (negative == 1)
     {
         bigNumA = bigNumBHead->primeiro->proximo;
@@ -200,16 +205,16 @@ void subtrair(Lista *bigNumAHead, Lista *bigNumBHead, BigNum **res, Lista *list)
 
     result->anterior = NULL;
 
-    while (bigNumA != NULL || bigNumB != NULL) // A soma somente para quando os dois numeros acabam
+    while (bigNumA != NULL || bigNumB != NULL) // A subtração somente para quando os dois numeros acabam
     {
         if (bigNumB != NULL)
         {
-            if ((bigNumA->num - bigNumB->num) < 0) // se a soma for maior que 10 fazemos o "vai um"
+            if ((bigNumA->num - bigNumB->num) < 0) // se a subtração for menor que zero teremos que pegar emprestado na casa ao lado
             {
                 aux = bigNumA->proximo;
                 while (aux != NULL)
                 {
-                    if (aux->num > 0)
+                    if (aux->num > 0) // quando encontrar o primeiro numero maior que zero vamos tirar 1
                     {
                         aux->num--;
                         break;
@@ -225,14 +230,14 @@ void subtrair(Lista *bigNumAHead, Lista *bigNumBHead, BigNum **res, Lista *list)
             }
             else
             {
-                result->num = bigNumA->num - bigNumB->num; // se a soma nao explode basta fazer normalmente
+                result->num = bigNumA->num - bigNumB->num; // se a sbutração não for < 0 basta fazer normalmente
             }
             bigNumA = bigNumA->proximo;
             bigNumB = bigNumB->proximo;
         }
         else
         {
-            result->num = bigNumA->num;
+            result->num = bigNumA->num; // se o subtrator tiver chegado ao fim o resultado recebe o resto do subtraendo
             bigNumA = bigNumA->proximo;
         }
         result->proximo = (BigNum *)malloc(sizeof(BigNum));
@@ -242,17 +247,27 @@ void subtrair(Lista *bigNumAHead, Lista *bigNumBHead, BigNum **res, Lista *list)
 
     result = result->anterior;
     result->proximo = NULL;
-    removerZeros(result, list);
+    removerZeros(result, list); // removemos os zeros a esquerda e aplicamos o sinal negativo no que sobrou
     if (negative == 1)
     {
         list->ultimo->num = list->ultimo->num * -1;
     }
 }
 
-BigNum *multiplicar(BigNum *bigNumA, BigNum *bigNumB)
+void multiplicar(Lista *bigNumAHead, Lista *bigNumBHead, BigNum **res, Lista *list)
 {
     BigNum *result = (BigNum *)malloc(sizeof(BigNum));
+    BigNum *bigNumA = (BigNum *)malloc(sizeof(BigNum));
+    BigNum *bigNumB = (BigNum *)malloc(sizeof(BigNum));
+    Lista *controllerParcialResult = (Lista *)malloc(sizeof(Lista));
+
+    bigNumA = bigNumAHead->primeiro->proximo;
+    bigNumB = bigNumBHead->primeiro->proximo;
+
     result->num = 0;
+    result->anterior = NULL;
+    result->proximo = NULL;
+    list->primeiro = result;
 
     int carrega = 0;
     int salta = 0;
@@ -261,52 +276,64 @@ BigNum *multiplicar(BigNum *bigNumA, BigNum *bigNumB)
     while (bigNumA != NULL)
     {
         BigNum *parcialResult = (BigNum *)malloc(sizeof(BigNum));
-        while (bigNumB != NULL)
+        parcialResult->num = 0;
+        parcialResult->anterior = NULL;
+        controllerParcialResult->primeiro = parcialResult;
+
+        if (salta > 0)
         {
-            if (salta > 0)
+            for (i = 0; i < salta; i++) // a medida que as operações vão indo colocamos zeros no incio na hora da soma
             {
-                for (i = 0; i < salta; i++)
-                {
-                    parcialResult->num = 0;
-                    parcialResult->proximo;
-                }
-            }
-            else
-            {
-                if ((bigNumB->num + carrega) >= 10)
-                {
-                    bigNumB->proximo->num = (bigNumB->num + carrega) / 10; //
-                }
-                else
-                {
-                    bigNumB->num += carrega;
-                }
-
-                if (bigNumA->num == 0)
-                {
-                    break;
-                }
-
-                if (bigNumB->num * bigNumA->num >= 10) // verifica se a multplicação é maior que 10
-                {
-                    carrega = (bigNumB->num * bigNumA->num) / 10;
-                    parcialResult->num += (bigNumB->num * bigNumA->num) % 10;
-                }
-                else
-                {
-                    carrega = 0;
-                    parcialResult->num += bigNumB->num * bigNumA->num;
-                }
-                bigNumB = bigNumB->proximo;
+                parcialResult->num = 0;
+                parcialResult->proximo = (BigNum *)malloc(sizeof(BigNum));
+                parcialResult->proximo->anterior = parcialResult;
                 parcialResult = parcialResult->proximo;
             }
         }
+        while (bigNumB != NULL)
+        {
+            if (bigNumB->num * bigNumA->num >= 10) // verifica se a multplicação é maior que 10
+            {
+                carrega = (bigNumB->num * bigNumA->num) / 10;
+                parcialResult->num += (bigNumB->num * bigNumA->num) % 10;
+            }
+            else
+            {
+                carrega = 0;
+                parcialResult->num += bigNumB->num * bigNumA->num;
+            }
+            bigNumB = bigNumB->proximo;
+
+            parcialResult->proximo = (BigNum *)malloc(sizeof(BigNum));
+            parcialResult->proximo->anterior = parcialResult;
+            parcialResult = parcialResult->proximo;
+            parcialResult->num = carrega;
+        }
+        bigNumB = bigNumBHead->primeiro->proximo;
         salta++;
-        // result = somar(parcialResult, result);
+
+        if (carrega > 0)
+        {
+            parcialResult->num = carrega;
+        }
+        else
+        {
+            parcialResult = parcialResult->anterior;
+        }
+        parcialResult->proximo = NULL;
+        controllerParcialResult->ultimo = parcialResult;
+
+        BigNum *aux = (BigNum *)malloc(sizeof(BigNum));
+        somar(controllerParcialResult->primeiro, list->primeiro, aux, list);
+        result = list->primeiro;
         destruir(parcialResult);
+        free(parcialResult);
         bigNumA = bigNumA->proximo;
     }
-    return result;
+}
+
+BigNum *dividir(BigNum *numerador, BigNum *divisor)
+{
 }
 
 void imprimeBignum(BigNum *Num)
@@ -324,12 +351,12 @@ void removerZeros(BigNum *bigNum, Lista *controller)
 {
     while (bigNum != NULL)
     {
-        if (bigNum->anterior == NULL || bigNum->num != 0)
+        if (bigNum->anterior == NULL || bigNum->num != 0) // o loop percorre ate chegar no inicio da lista ou ate achar um numero != 0
         {
             bigNum->proximo = NULL;
             break;
         }
-        bigNum = bigNum->anterior;
+        bigNum = bigNum->anterior; // enquanto não acha um num != 0 ou chega no inicio da lista removemos os 0
         free(bigNum->proximo);
     }
     controller->ultimo = bigNum;
