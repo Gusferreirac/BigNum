@@ -275,7 +275,7 @@ void multiplicar(Lista *bigNumAHead, Lista *bigNumBHead, BigNum **res, Lista *li
 
     while (bigNumA != NULL)
     {
-        BigNum *parcialResult = (BigNum *)malloc(sizeof(BigNum));
+        BigNum *parcialResult = (BigNum *)malloc(sizeof(BigNum)); // resultado parcial (que sera feito a soma depois)
         parcialResult->num = 0;
         parcialResult->anterior = NULL;
         controllerParcialResult->primeiro = parcialResult;
@@ -294,13 +294,13 @@ void multiplicar(Lista *bigNumAHead, Lista *bigNumBHead, BigNum **res, Lista *li
         {
             if (bigNumB->num * bigNumA->num >= 10) // verifica se a multplicação é maior que 10
             {
-                carrega = (bigNumB->num * bigNumA->num) / 10;
+                carrega = (bigNumB->num * bigNumA->num) / 10; // se for maior que 10 carrega a casa do decimal para a proxima casa
                 parcialResult->num += (bigNumB->num * bigNumA->num) % 10;
             }
             else
             {
                 carrega = 0;
-                parcialResult->num += bigNumB->num * bigNumA->num;
+                parcialResult->num += bigNumB->num * bigNumA->num; // caso nao for > 10 a multiplicacao será feita normalmente
             }
             bigNumB = bigNumB->proximo;
 
@@ -314,7 +314,7 @@ void multiplicar(Lista *bigNumAHead, Lista *bigNumBHead, BigNum **res, Lista *li
 
         if (carrega > 0)
         {
-            parcialResult->num = carrega;
+            parcialResult->num = carrega; // se sobrou um carrega no ultimo o numero recebe esse carrega
         }
         else
         {
@@ -324,7 +324,7 @@ void multiplicar(Lista *bigNumAHead, Lista *bigNumBHead, BigNum **res, Lista *li
         controllerParcialResult->ultimo = parcialResult;
 
         BigNum *aux = (BigNum *)malloc(sizeof(BigNum));
-        somar(controllerParcialResult->primeiro, list->primeiro, aux, list);
+        somar(controllerParcialResult->primeiro, list->primeiro, aux, list); // fazemos as somas dos parcialResult
         result = list->primeiro;
         destruir(parcialResult);
         free(parcialResult);
