@@ -19,7 +19,7 @@ void multiplicar(Lista *bigNumAHead, Lista *bigNumBHead, Lista *list);
 void dividir(Lista *numerador, Lista *divisor, Lista *resultController);
 void fatorial(Lista *num, Lista *numClone, Lista *result);
 void clone(Lista *a, Lista *b);
-int *intToBignum(int num, BigNum **head, Lista *list);
+int intToBignum(int num, Lista *list);
 int contaCasas(Lista *li);
 void incrementa(Lista *li);
 void insereElemento(Lista *controller, BigNum *num);

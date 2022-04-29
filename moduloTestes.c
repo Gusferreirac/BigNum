@@ -26,19 +26,19 @@ int main()
 
     scanf("%d %d", &a, &b);
 
-    controllerA->casas = intToBignum(a, bigNum1, controllerA);
-    controllerAClone->casas = intToBignum(a, bigNum1, controllerAClone);
-    controllerB->casas = intToBignum(b, bigNum2, controllerB);
+    controllerA->casas = intToBignum(a, controllerA);
+    controllerAClone->casas = intToBignum(a, controllerAClone);
+    controllerB->casas = intToBignum(b, controllerB);
+    // imprimeBignum(controllerA->ultimo);
 
     //  subtrair(controllerA, controllerB, soma, controllerC);
     //  multiplicar(controllerA, controllerB, soma, controllerC);
-    fatorial(controllerA, controllerAClone, controllerC);
+    // fatorial(controllerA, controllerAClone, controllerC);
     // incrementa(controllerA);
-    imprimeBignum(controllerC->ultimo);
-    system("pause");
 
-    dividir(controllerC, controllerB, controllerC);
-    // controllerC->primeiro->anterior = NULL;
+    dividir(controllerA, controllerB, controllerC);
+    // dividir(controllerC, controllerB, controllerC);
+    //  controllerC->primeiro->anterior = NULL;
     imprimeBignum(controllerC->ultimo);
 
     destruir(bigNum1);

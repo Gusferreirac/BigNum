@@ -50,8 +50,8 @@ int main()
         i++;
 
         printf("A ");
-        controllerA->casas = intToBignum(num1, bigNum1, controllerA); // controllerA = n;
-        controllerB->casas = intToBignum(num2, bigNum2, controllerB); // controllerA = m
+        controllerA->casas = intToBignum(num1, controllerA); // controllerA = n;
+        controllerB->casas = intToBignum(num2, controllerB); // controllerA = m
         printf("B ");
         subtrair(controllerA, controllerB, controllerC); // controllerC = n-m
         printf("C ");
