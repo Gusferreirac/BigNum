@@ -29,16 +29,17 @@ int main()
     controllerA->casas = intToBignum(a, controllerA);
     controllerAClone->casas = intToBignum(a, controllerAClone);
     controllerB->casas = intToBignum(b, controllerB);
-    // imprimeBignum(controllerA->ultimo);
+    imprimeBignum(controllerA->ultimo);
+    system("pause");
 
     //  subtrair(controllerA, controllerB, soma, controllerC);
     //  multiplicar(controllerA, controllerB, soma, controllerC);
     // fatorial(controllerA, controllerAClone, controllerC);
     // incrementa(controllerA);
 
-    dividir(controllerA, controllerB, controllerC);
-    // dividir(controllerC, controllerB, controllerC);
-    //  controllerC->primeiro->anterior = NULL;
+    // dividir(controllerA, controllerB, controllerC);
+    //  dividir(controllerC, controllerB, controllerC);
+    //   controllerC->primeiro->anterior = NULL;
     imprimeBignum(controllerC->ultimo);
 
     destruir(bigNum1);

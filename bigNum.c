@@ -43,8 +43,9 @@ int intToBignum(int num, Lista *list)
     no->anterior = NULL;
     list->primeiro = no;
 
-    itoa(num, buffer, 10);
-    strrev(buffer);
+    sprintf(buffer, "%d", num);
+    // itoa(num, buffer, 10);
+    revstr(buffer);
     tam = strlen(buffer);
 
     for (i = 0; i < tam; i++)
@@ -787,4 +788,20 @@ void removerZeros(BigNum *bigNum, Lista *controller)
         free(bigNum->proximo);
     }
     controller->ultimo = bigNum;
+}
+
+void revstr(char *str1)
+{
+    // declare variable
+    int i, len, temp;
+    len = strlen(str1); // use strlen() to get the length of str string
+
+    // use for loop to iterate the string
+    for (i = 0; i < len / 2; i++)
+    {
+        // temp variable use to temporary hold the string
+        temp = str1[i];
+        str1[i] = str1[len - i - 1];
+        str1[len - i - 1] = temp;
+    }
 }
