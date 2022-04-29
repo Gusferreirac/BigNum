@@ -65,14 +65,13 @@ int *intToBignum(int num, BigNum **head, Lista *list)
     return tam;
 }
 
-void somar(BigNum *bigNumAHead, BigNum *bigNumBHead, BigNum **res, Lista *list)
+void somar(BigNum *bigNumAHead, BigNum *bigNumBHead, Lista *list)
 {
     BigNum *result = (BigNum *)malloc(sizeof(BigNum));
     BigNum *bigNumA = (BigNum *)malloc(sizeof(BigNum));
     BigNum *bigNumB = (BigNum *)malloc(sizeof(BigNum));
     int carrega = 0;
 
-    *res = result;
     bigNumA = bigNumAHead;
     bigNumB = bigNumBHead;
 
@@ -146,7 +145,7 @@ void somar(BigNum *bigNumAHead, BigNum *bigNumBHead, BigNum **res, Lista *list)
     list->ultimo = result;
 }
 
-void subtrair(Lista *bigNumAHead, Lista *bigNumBHead, BigNum **res, Lista *list)
+void subtrair(Lista *bigNumAHead, Lista *bigNumBHead, Lista *list)
 {
     BigNum *result = (BigNum *)malloc(sizeof(BigNum));
     BigNum *bigNumA = (BigNum *)malloc(sizeof(BigNum));
@@ -156,7 +155,7 @@ void subtrair(Lista *bigNumAHead, Lista *bigNumBHead, BigNum **res, Lista *list)
     int carrega = 0;
     int negative = 0;
 
-    *res = result;
+    //*res = result;
 
     // A primeira coisa que devemos fazer é verificar se o subtrator é maior ou menor que o subtraendo
     if (bigNumAHead->casas < bigNumBHead->casas)
@@ -255,24 +254,52 @@ void subtrair(Lista *bigNumAHead, Lista *bigNumBHead, BigNum **res, Lista *list)
     {
         list->ultimo->num = list->ultimo->num * -1;
     }
+
+    // while (result->anterior != NULL)
+    // {
+    //     list->casas++;
+    //     result = result->anterior;
+    // }
+
+    // printf("\n\n");
+    // printf("Resultado:");
+    // imprimeBignum(list->ultimo);
+    // printf("\n\n");
 }
 
-void multiplicar(Lista *bigNumAHead, Lista *bigNumBHead, BigNum **res, Lista *list)
+void multiplicar(Lista *bigNumAHead, Lista *bigNumBHead, Lista *list)
 {
     BigNum *result = (BigNum *)malloc(sizeof(BigNum));
     BigNum *bigNumA = (BigNum *)malloc(sizeof(BigNum));
     BigNum *bigNumB = (BigNum *)malloc(sizeof(BigNum));
     Lista *controllerParcialResult = (Lista *)malloc(sizeof(Lista));
 
+    // printf("\n");
+    // imprimeBignum(bigNumAHead->ultimo);
+    // imprimeBignum(bigNumBHead->ultimo);
+    // printf("\n");
+
     bigNumA = bigNumAHead->primeiro;
     bigNumB = bigNumBHead->primeiro;
-
-    // printf("%d * %d\n", bigNumA->num, bigNumB->num);
 
     result->num = 0;
     result->anterior = NULL;
     result->proximo = NULL;
     list->primeiro = result;
+
+    // if (bigNumAHead->casas != 1 && bigNumBHead->casas != 1)
+    // {
+    //     printf("Entrei! %d e %d\n", bigNumAHead->casas, bigNumBHead->casas);
+    //     list->casas = bigNumAHead->casas + bigNumBHead->casas;
+    // }
+    // else if (bigNumAHead->casas == 1)
+    // {
+    //     list->casas = bigNumBHead->casas;
+    // }
+    // else
+    // {
+    //     list->casas = bigNumAHead->casas;
+    // }
 
     int carrega = 0;
     int salta = 0;
@@ -314,7 +341,7 @@ void multiplicar(Lista *bigNumAHead, Lista *bigNumBHead, BigNum **res, Lista *li
             parcialResult = parcialResult->proximo;
             parcialResult->num = carrega;
         }
-        bigNumB = bigNumBHead->primeiro->proximo;
+        bigNumB = bigNumBHead->primeiro;
         salta++;
 
         if (carrega > 0)
@@ -329,12 +356,15 @@ void multiplicar(Lista *bigNumAHead, Lista *bigNumBHead, BigNum **res, Lista *li
         controllerParcialResult->ultimo = parcialResult;
 
         BigNum *aux = (BigNum *)malloc(sizeof(BigNum));
-        somar(controllerParcialResult->primeiro, list->primeiro, aux, list); // fazemos as somas dos parcialResult
+        somar(controllerParcialResult->primeiro, list->primeiro, list); // fazemos as somas dos parcialResult
         result = list->primeiro;
         destruir(parcialResult);
-        free(parcialResult);
         bigNumA = bigNumA->proximo;
     }
+
+    list->casas = contaCasas(list);
+    // printf(" = ");
+    // imprimeBignum(list->ultimo);
 }
 
 void dividir(Lista *numerador, Lista *divisor, Lista *resultController)
@@ -342,16 +372,25 @@ void dividir(Lista *numerador, Lista *divisor, Lista *resultController)
     BigNum *result = (BigNum *)malloc(sizeof(BigNum));
     BigNum *bigNumA = (BigNum *)malloc(sizeof(BigNum));
     BigNum *bigNumB = (BigNum *)malloc(sizeof(BigNum));
-    BigNum *resto = (BigNum *)malloc(sizeof(BigNum));
-    int i, end = 0, maior = 0;
+    BigNum *aux = (BigNum *)malloc(sizeof(BigNum));
+    BigNum *multiply = (BigNum *)malloc(sizeof(BigNum));
+    Lista *multiplyController = (Lista *)malloc(sizeof(Lista *));
+    Lista *quocient = (Lista *)malloc(sizeof(Lista *));
+
+    int i, isMaior, end = 0, maior = 0;
 
     result = criar();
+    multiply = criar();
     bigNumA = criar();
     bigNumB = criar();
-    resto = criar();
 
+    multiply->num = 1;
+    multiplyController->primeiro = multiply;
+    multiplyController->casas = 1;
     bigNumA = numerador->ultimo;
     bigNumB = divisor->ultimo;
+
+    //-----------------------------------------------------------
 
     if (numerador->casas < divisor->casas)
     {
@@ -382,11 +421,6 @@ void dividir(Lista *numerador, Lista *divisor, Lista *resultController)
                 auxB = auxB->anterior;
             }
 
-            destruir(auxA);
-            destruir(auxB);
-            free(auxA);
-            free(auxB);
-
             if (maior != 1)
             {
                 result->num = 1;
@@ -404,30 +438,160 @@ void dividir(Lista *numerador, Lista *divisor, Lista *resultController)
         return;
     }
 
-    while (end != 1)
+    // ----------------------------------------------------------------------------------------- //
+    clone(multiplyController, quocient);
+    while (1)
     {
-        for (i = 0; i < divisor->casas; i++)
-        {
-            if (bigNumA == NULL)
-            {
-                result->num = 0;
-                result->proximo = NULL;
-                end = 1;
-                break;
-            }
+        printf("A ");
+        Lista *resultMutiply = (Lista *)malloc(sizeof(Lista));
+        // resultMutiply->primeiro = (BigNum *)malloc(sizeof(BigNum *));
+        // resultMutiply->ultimo = (BigNum *)malloc(sizeof(BigNum *));
+        // imprimeBignum(divisor->ultimo);
+        multiplicar(multiplyController, divisor, resultMutiply);
+        isMaior = compara(resultMutiply, numerador);
 
-            bigNumA = bigNumA->anterior;
+        if (isMaior == 1)
+        {
+            clone(quocient, resultController);
+            destruir(quocient->primeiro);
+            destruir(multiplyController->primeiro);
+            destruir(resultMutiply->primeiro);
+            return;
         }
-        bigNumA = numerador->ultimo;
+        destruir(resultMutiply->primeiro);
+        free(resultMutiply);
+        clone(multiplyController, quocient);
+        incrementa(multiplyController);
     }
 }
 
-void fatorial(Lista *num, Lista *result)
+int contaCasas(Lista *li)
+{
+    BigNum *a = (BigNum *)malloc(sizeof(BigNum));
+    int casas = 0;
+
+    a = li->primeiro;
+
+    while (a != NULL)
+    {
+        casas++;
+        a = a->proximo;
+    }
+
+    return casas;
+}
+
+void incrementa(Lista *li)
+{
+    BigNum *a = (BigNum *)malloc(sizeof(BigNum));
+    BigNum *b = (BigNum *)malloc(sizeof(BigNum));
+    int i, casas = 0;
+
+    a = li->primeiro;
+
+    if (a->num != 9)
+    {
+        a->num++;
+    }
+    else
+    {
+        while (a != NULL)
+        {
+            if (a->proximo == NULL)
+            {
+                a->proximo = (BigNum *)malloc(sizeof(BigNum));
+                a->proximo->anterior = a;
+                a->proximo->num = 1;
+                a = a->proximo;
+                li->ultimo = a;
+                li->casas++;
+                b = li->ultimo;
+                while (b->anterior != NULL)
+                {
+                    b = b->anterior;
+                    b->num = 0;
+                }
+
+                return;
+            }
+
+            a = a->proximo;
+            if (a->num < 9)
+            {
+                a->num = a->num + 1;
+                b = a;
+                while (b->anterior != NULL)
+                {
+                    b = b->anterior;
+                    b->num = 0;
+                }
+
+                return;
+            }
+        }
+    }
+}
+
+// Se a > b retorna 1 caso nao retorna 0
+int compara(Lista *a, Lista *b)
+{
+
+    if (b->casas < a->casas)
+    {
+        return 1;
+    }
+    else if (b->casas == a->casas)
+    {
+        if (b->ultimo->num < a->ultimo->num)
+        {
+            return 1;
+        }
+        else if (b->ultimo->num == a->ultimo->num)
+        {
+            BigNum *auxA = (BigNum *)malloc(sizeof(BigNum));
+            BigNum *auxB = (BigNum *)malloc(sizeof(BigNum));
+
+            auxA = b->ultimo;
+            auxB = a->ultimo;
+
+            while (auxA != NULL && auxB != NULL)
+            {
+
+                if (auxA->num < auxB->num)
+                {
+                    return 1;
+                    break;
+                }
+                else if (auxA->num > auxB->num)
+                {
+                    return 0;
+                }
+
+                auxA = auxA->anterior;
+                auxB = auxB->anterior;
+            }
+
+            destruir(auxA);
+            destruir(auxB);
+        }
+    }
+
+    return 0;
+}
+
+void insereElemento(Lista *controller, BigNum *num)
+{
+    num->anterior = controller->ultimo;
+    controller->ultimo->proximo = num;
+    controller->ultimo = num;
+    controller->casas++;
+}
+
+void fatorial(Lista *num, Lista *numClone, Lista *result)
 {
     BigNum *res = (BigNum *)malloc(sizeof(BigNum));
     BigNum *um = (BigNum *)malloc(sizeof(BigNum));
     BigNum *aux = (BigNum *)malloc(sizeof(BigNum));
-    BigNum *n = (BigNum *)malloc(sizeof(BigNum));
     Lista *controllerUm = (Lista *)malloc(sizeof(Lista));
     Lista *controllerAux = (Lista *)malloc(sizeof(Lista));
     Lista *parcialResult = (Lista *)malloc(sizeof(Lista));
@@ -437,35 +601,74 @@ void fatorial(Lista *num, Lista *result)
     res->num = 1;
     um = criar();
     um->num = 1;
-    n = num->primeiro;
 
     controllerUm->primeiro = um;
     controllerUm->ultimo = um;
     controllerUm->casas = 1;
+    controllerAux->casas = 1;
 
     result->primeiro = res;
 
-    subtrair(num, controllerUm, aux, controllerAux);
-    multiplicar(controllerAux, num, res, result);
+    subtrair(num, controllerUm, controllerAux);
+    multiplicar(controllerAux, numClone, result);
+    clone(result, parcialResult);
+    // printf(" = ");
+    // imprimeBignum(result->ultimo);
+    // printf("\n");
     while (end != 1)
     {
-        n->num--;
-        subtrair(num, controllerUm, aux, controllerAux);
-        if (controllerAux->primeiro->num != 0)
-        {
-            multiplicar(controllerAux, result, res, result);
-        }
-        else
+        subtrair(controllerAux, controllerUm, controllerAux);
+
+        // printf("ControllerAux: ");
+        // imprimeBignum(controllerAux->ultimo);
+        // printf("\n");
+        if (controllerAux->primeiro->num == 0 && controllerAux->primeiro == controllerAux->ultimo)
         {
             end = 1;
         }
+        else
+        {
+            multiplicar(controllerAux, parcialResult, result);
+            clone(result, parcialResult);
+            // printf(" = ");
+            // imprimeBignum(result->ultimo);
+            // printf("\n");
+        }
     }
+
+    destruir(controllerAux->primeiro);
+    destruir(controllerUm->primeiro);
+}
+
+// Clona a em b
+void clone(Lista *a, Lista *b)
+{
+    BigNum *num = (BigNum *)malloc(sizeof(BigNum));
+    BigNum *numClone = (BigNum *)malloc(sizeof(BigNum));
+
+    num = a->primeiro;
+
+    numClone = criar();
+    b->primeiro = numClone;
+
+    while (num != NULL)
+    {
+        numClone->num = num->num;
+
+        num = num->proximo;
+        numClone->proximo = (BigNum *)malloc(sizeof(BigNum));
+        numClone->proximo->anterior = numClone;
+        numClone = numClone->proximo;
+    }
+    numClone = numClone->anterior;
+    numClone->proximo = NULL;
+    b->ultimo = numClone;
 }
 
 void imprimeBignum(BigNum *Num)
 {
     BigNum *no = Num;
-    printf("\n");
+    // printf("\n");
     while (no != NULL)
     {
         printf("%d ", no->num);

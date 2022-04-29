@@ -2,7 +2,6 @@ typedef struct bigNum
 {
     struct bigNum *proximo;
     struct bigNum *anterior;
-    struct bigNum *ultimo;
     int num;
 } BigNum;
 
@@ -14,13 +13,19 @@ typedef struct lista
 } Lista;
 
 BigNum *criar();
-void somar(BigNum *bigNumAHead, BigNum *bigNumBHead, BigNum **res, Lista *list);
-void subtrair(Lista *bigNumAHead, Lista *bigNumBHead, BigNum **res, Lista *list);
-void multiplicar(Lista *bigNumAHead, Lista *bigNumBHead, BigNum **res, Lista *list);
+void somar(BigNum *bigNumAHead, BigNum *bigNumBHead, Lista *list);
+void subtrair(Lista *bigNumAHead, Lista *bigNumBHead, Lista *list);
+void multiplicar(Lista *bigNumAHead, Lista *bigNumBHead, Lista *list);
 void dividir(Lista *numerador, Lista *divisor, Lista *resultController);
-void fatorial(Lista *num, Lista *result);
+void fatorial(Lista *num, Lista *numClone, Lista *result);
+void clone(Lista *a, Lista *b);
 int *intToBignum(int num, BigNum **head, Lista *list);
+int contaCasas(Lista *li);
+void incrementa(Lista *li);
+void insereElemento(Lista *controller, BigNum *num);
+int compara(Lista *a, Lista *b);
 void destruir(BigNum *bigNum);
 void imprimir(BigNum *bigNum);
 void imprimeBignum(BigNum *Num);
 void removerZeros(BigNum *bigNum, Lista *controller);
+void digit_shift(BigNum *n, int d);
