@@ -39,7 +39,6 @@ int intToBignum(int num, Lista *list)
     char buffer[5];
 
     BigNum *no = (BigNum *)malloc(sizeof(BigNum));
-    BigNum *aux = (BigNum *)malloc(sizeof(BigNum));
 
     no->anterior = NULL;
     list->primeiro = no;
@@ -55,14 +54,14 @@ int intToBignum(int num, Lista *list)
         if (i != (tam - 1))
         {
             no->proximo = (BigNum *)malloc(sizeof(BigNum));
-            aux = no;
+            no->proximo->anterior = no;
             no = no->proximo;
-            no->anterior = aux;
         }
     }
 
     no->proximo = NULL;
     list->ultimo = no;
+    freeNo(no);
     return tam;
 }
 
@@ -249,4 +248,16 @@ void removerZeros(BigNum *bigNum, Lista *controller)
         free(bigNum->proximo);
     }
     controller->ultimo = bigNum;
+}
+
+void freeLista(Lista *li){
+    free(li->primeiro);
+    free(li->ultimo);
+    free(li);
+}
+
+void freeNo(BigNum *no){
+    free(no->anterior);
+    free(no->proximo);
+    free(no);
 }

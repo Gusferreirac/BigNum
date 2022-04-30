@@ -25,5 +25,7 @@ int compara(Lista *a, Lista *b);
 void destruir(BigNum *bigNum);
 void imprimeBignum(BigNum *Num);
 void removerZeros(BigNum *bigNum, Lista *controller);
+void freeLista(Lista *li);
+void freeNo(BigNum *no);
 
 #endif
