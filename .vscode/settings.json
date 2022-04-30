@@ -1,7 +1,0 @@
-{
-  "files.associations": {
-    "system_error": "c",
-    "xtr1common": "c",
-    "stdio.h": "c"
-  }
-}
