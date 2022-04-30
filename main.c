@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "bigNum.h"
+#include "bigNumArithmetics.h"
 
 int main()
 {

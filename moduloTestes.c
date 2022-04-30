@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "bigNum.h"
+#include "bigNumArithmetics.h"
 
 int main()
 {
