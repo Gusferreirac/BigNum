@@ -135,9 +135,9 @@ void incrementa(Lista *li)
 // Se a > b retorna 1 caso nao retorna 0
 int compara(Lista *a, Lista *b)
 {
-    printf("NumeradorParcial ");
-    imprimeBignum(b->ultimo);
-    printf("\n\n");
+    // printf("NumeradorParcial ");
+    // imprimeBignum(b->ultimo);
+    // printf("\n\n");
     if (b->casas < a->casas)
     {
         return 1;
@@ -150,8 +150,8 @@ int compara(Lista *a, Lista *b)
         }
         else if (b->ultimo->num == a->ultimo->num)
         {
-            BigNum *auxA = (BigNum *)malloc(sizeof(BigNum));
-            BigNum *auxB = (BigNum *)malloc(sizeof(BigNum));
+            BigNum *auxA;
+            BigNum *auxB;
 
             auxA = b->ultimo;
             auxB = a->ultimo;
@@ -173,15 +173,13 @@ int compara(Lista *a, Lista *b)
                 auxB = auxB->anterior;
             }
 
-            destruir(auxA);
-            destruir(auxB);
         }
     }
 
     return 0;
 }
 
-void insereElemento(Lista *controller, BigNum *num)
+void insereNoFinal(Lista *controller, BigNum *num)
 {
     if (controller->casas == 0)
     {
@@ -196,6 +194,24 @@ void insereElemento(Lista *controller, BigNum *num)
     num->anterior = controller->ultimo;
     num->proximo = NULL;
     controller->ultimo = num;
+    controller->casas++;
+}
+
+void insereNoInicio(Lista *controller, BigNum *num)
+{
+    if (controller->casas == 0)
+    {
+        controller->primeiro = num;
+        controller->ultimo = num;
+        controller->primeiro->anterior = NULL;
+        controller->ultimo->proximo = NULL;
+        controller->casas++;
+        return;
+    }
+    controller->primeiro->anterior = num;
+    num->proximo = controller->primeiro;
+    num->anterior = NULL;
+    controller->primeiro = num;
     controller->casas++;
 }
 

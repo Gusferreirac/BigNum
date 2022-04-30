@@ -318,38 +318,34 @@ void multiplicar(Lista *bigNumAHead, Lista *bigNumBHead, Lista *list) //*Multipl
 void dividir(Lista *numerador, Lista *divisor, Lista *resultController)
 {
     BigNum *clone;
-    BigNum *result = (BigNum *)malloc(sizeof(BigNum));
-    BigNum *numeradorNum = (BigNum *)malloc(sizeof(BigNum));
-    BigNum *divisorNum = (BigNum *)malloc(sizeof(BigNum));
-    Lista *numeradorParcial = (Lista *)malloc(sizeof(Lista *));
-    Lista *quocient = (Lista *)malloc(sizeof(Lista *));
-    Lista *multiplicador = (Lista *)malloc(sizeof(Lista *));
-    Lista *guess = (Lista *)malloc(sizeof(Lista *));
-    Lista *resto = (Lista *)malloc(sizeof(Lista *));
+    BigNum *result;
+    BigNum *numeradorNum;
+    Lista *numeradorParcial = (Lista *)malloc(sizeof(Lista));
+    Lista *quocient = (Lista *)malloc(sizeof(Lista));
+    Lista *multiplicador = (Lista *)malloc(sizeof(Lista));
+    Lista *guess = (Lista *)malloc(sizeof(Lista));
+    Lista *resto = (Lista *)malloc(sizeof(Lista));
 
     int i, multi, end = 0, maior = 0, menor = 0;
 
     result = criar();
-    numeradorNum = criar();
-    divisorNum = criar();
 
     numeradorParcial->casas = 0;
 
     numeradorNum = numerador->ultimo;
-    divisorNum = divisor->ultimo;
 
     //---------------------------VERIFICA SE DIVISOR > NUMERADOR-------------------------------
     //-------------------------------OU SE DIVISOR = NUMERADOR---------------------------------
     if (numerador->casas < divisor->casas)
     {
-        printf("1");
+        //printf("1");
         maior = 1;
     }
     else if (numerador->casas == divisor->casas)
     {
         if (numerador->ultimo->num < divisor->ultimo->num)
         {
-            printf("2");
+            //printf("2");
             maior = 1;
         }
         else if (numerador->ultimo->num == divisor->ultimo->num)
@@ -364,7 +360,7 @@ void dividir(Lista *numerador, Lista *divisor, Lista *resultController)
             {
                 if (auxA->num < auxB->num)
                 {
-                    printf("3");
+                    //printf("3");
                     maior = 1;
                     break;
                 }
@@ -396,17 +392,21 @@ void dividir(Lista *numerador, Lista *divisor, Lista *resultController)
     }
     // --------------------------------------- FIM DA VERIFICAÇÃO -------------------------------------------------- //
 
+    free(result);
+
     for (i = 0; i < divisor->casas; i++)
     {
-        clone = (BigNum *)malloc(sizeof(BigNum));
         clone = criar();
         clone->num = numeradorNum->num;
-        insereElemento(numeradorParcial, clone);
+        insereNoInicio(numeradorParcial, clone);
         // imprimeBignum(numeradorParcial->ultimo);
         // printf("  ");
         numeradorNum = numeradorNum->anterior;
         free(clone);
     }
+
+    // imprimeBignum(numeradorParcial->ultimo);
+    // printf("\n");
 
     // system("pause");
     //   printf("%d", numeradorParcial->ultimo->num);
@@ -432,12 +432,12 @@ void dividir(Lista *numerador, Lista *divisor, Lista *resultController)
     destruir(guess->primeiro);
     //printf("C");
 
-    BigNum *aux = (BigNum *)malloc(sizeof(BigNum));
+    BigNum *aux;
     aux = criar();
     aux->num = multi;
     //printf("D");
     resultController->casas = 0;
-    insereElemento(resultController, aux);
+    insereNoInicio(resultController, aux);
     //printf("E");
     //printf("\n");
     //imprimeBignum(divisor->ultimo);
@@ -450,7 +450,7 @@ void dividir(Lista *numerador, Lista *divisor, Lista *resultController)
     //printf("\n");
     //imprimeBignum(guess->ultimo);
     //printf("\n");
-    system("pause");
+    //system("pause");
     subtrair(numeradorParcial, guess, resto);
     //printf("G");
 
@@ -459,16 +459,21 @@ void dividir(Lista *numerador, Lista *divisor, Lista *resultController)
     while (numeradorNum != NULL)
     {
         clone->num = numeradorNum->num;
-        insereElemento(resto, clone);
+        //printf("  %d num  ", numeradorNum->num);
+        insereNoInicio(resto, clone); //tem que inserir no inicio
 
         for (i = 0; i < 10; i++)
         {
             multiplicador->casas = intToBignum(i, multiplicador);
             multiplicar(divisor, multiplicador, guess);
+            // imprimeBignum(resto->ultimo);
+            // printf(" ");
+            // imprimeBignum(guess->ultimo);
             if (compara(guess, resto) == 1)
             {
                 break;
             }
+            //printf("\n");
             destruir(multiplicador->primeiro);
             destruir(guess->primeiro);
         }
@@ -477,16 +482,25 @@ void dividir(Lista *numerador, Lista *divisor, Lista *resultController)
         destruir(multiplicador->primeiro);
         destruir(guess->primeiro);
 
-        BigNum *aux = (BigNum *)malloc(sizeof(BigNum));
+        BigNum *aux;
         aux = criar();
         aux->num = multi;
 
-        insereElemento(resultController, aux);
-        multiplicar(divisor, multiplicador, guess);
+        insereNoInicio(resultController, aux);
+        multiplicar(divisor, resultController, guess);
         subtrair(resto, guess, resto);
 
         numeradorNum = numeradorNum->anterior;
     }
+
+    destruir(numeradorParcial->primeiro);
+    destruir(guess->primeiro);
+    destruir(resto->primeiro);
+    free(numeradorParcial);
+    free(guess);
+    free(quocient);
+    free(multiplicador);
+    free(resto);
     //printf("H");
 }
 

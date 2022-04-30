@@ -23,9 +23,10 @@ int main()
 
     //somar(controllerA->primeiro, controllerB->primeiro, controllerC);
     //multiplicar(controllerA, controllerB,controllerC);
-    //dividir(controllerA,controllerB,controllerC);
+    //compara(controllerA, controllerB);
+    dividir(controllerA,controllerB,controllerC);
     //subtrair(controllerA, controllerB,controllerC);
-    fatorial(controllerA, controllerAClone, controllerC);
+    //fatorial(controllerA, controllerAClone, controllerC);
     //clone(controllerA,controllerC);
     //clone(controllerB,controllerC);
     // incrementa(controllerA);
