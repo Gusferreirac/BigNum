@@ -67,7 +67,7 @@ int intToBignum(int num, Lista *list)
 
 int contaCasas(Lista *li)
 {
-    BigNum *a = (BigNum *)malloc(sizeof(BigNum));
+    BigNum *a;
     int casas = 0;
 
     a = li->primeiro;
@@ -202,7 +202,7 @@ void insereElemento(Lista *controller, BigNum *num)
 // Clona a em b
 void clone(Lista *a, Lista *b)
 {
-    BigNum *num = (BigNum *)malloc(sizeof(BigNum));
+    BigNum *num;
     BigNum *numClone = (BigNum *)malloc(sizeof(BigNum));
 
     num = a->primeiro;
@@ -213,13 +213,13 @@ void clone(Lista *a, Lista *b)
     while (num != NULL)
     {
         numClone->num = num->num;
-
         num = num->proximo;
         numClone->proximo = (BigNum *)malloc(sizeof(BigNum));
         numClone->proximo->anterior = numClone;
         numClone = numClone->proximo;
     }
     numClone = numClone->anterior;
+    free(numClone->proximo);
     numClone->proximo = NULL;
     b->ultimo = numClone;
 }

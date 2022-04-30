@@ -21,8 +21,9 @@ int main()
     controllerB->casas = intToBignum(b, controllerB);
     //imprimeBignum(controllerA->ultimo);
 
-    somar(controllerA->primeiro, controllerB->primeiro, controllerC);
-    //  multiplicar(controllerA, controllerB, soma, controllerC);
+    //somar(controllerA->primeiro, controllerB->primeiro, controllerC);
+    multiplicar(controllerA, controllerB,controllerC);
+    //subtrair(controllerA, controllerB,controllerC);
     // fatorial(controllerA, controllerAClone, controllerC);
     // incrementa(controllerA);
 

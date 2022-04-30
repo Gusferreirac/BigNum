@@ -74,6 +74,7 @@ void somar(BigNum *bigNumAHead, BigNum *bigNumBHead, Lista *list)
         if (bigNumA == NULL && bigNumB == NULL) // se os dois numeros chegaram ao fim a ultima casa do resultado recebe o ultimo vai um
         {
             result->num = carrega; // se a ultima soma explodiu a ultima casa do resultado recebera 1 caso nao recebera 0 o que nao muda o resultado (0 a esq.)
+
         }
     }
     if (result->num == 0)
@@ -81,6 +82,7 @@ void somar(BigNum *bigNumAHead, BigNum *bigNumBHead, Lista *list)
         result = result->anterior; // tirando o zero a esquerda
         free(result->proximo);
     }
+
     result->proximo = NULL;
     list->ultimo = result;
 }
@@ -90,7 +92,7 @@ void subtrair(Lista *bigNumAHead, Lista *bigNumBHead, Lista *list)
     BigNum *result = (BigNum *)malloc(sizeof(BigNum));
     BigNum *bigNumA;
     BigNum *bigNumB;
-    BigNum *aux = (BigNum *)malloc(sizeof(BigNum));
+    BigNum *aux;
 
     int carrega = 0;
     int negative = 0;
@@ -110,8 +112,8 @@ void subtrair(Lista *bigNumAHead, Lista *bigNumBHead, Lista *list)
         }
         else if (bigNumAHead->ultimo->num == bigNumBHead->ultimo->num)
         {
-            BigNum *auxA = (BigNum *)malloc(sizeof(BigNum));
-            BigNum *auxB = (BigNum *)malloc(sizeof(BigNum));
+            BigNum *auxA;
+            BigNum *auxB;
 
             auxA = bigNumAHead->ultimo;
             auxB = bigNumBHead->ultimo;
@@ -167,7 +169,6 @@ void subtrair(Lista *bigNumAHead, Lista *bigNumBHead, Lista *list)
                     }
                     aux = aux->proximo;
                 }
-
                 result->num = (bigNumA->num + 10) - bigNumB->num;
             }
             else
@@ -208,15 +209,13 @@ void subtrair(Lista *bigNumAHead, Lista *bigNumBHead, Lista *list)
     // imprimeBignum(list->ultimo);
     // printf("\n\n");
 
-    free(aux);
-
 }
 
 void multiplicar(Lista *bigNumAHead, Lista *bigNumBHead, Lista *list) //*Multiplicação OK!
 {
     BigNum *result = (BigNum *)malloc(sizeof(BigNum));
-    BigNum *bigNumA = (BigNum *)malloc(sizeof(BigNum));
-    BigNum *bigNumB = (BigNum *)malloc(sizeof(BigNum));
+    BigNum *bigNumA;
+    BigNum *bigNumB;
     Lista *controllerParcialResult = (Lista *)malloc(sizeof(Lista));
 
     // printf("\n");
@@ -231,6 +230,7 @@ void multiplicar(Lista *bigNumAHead, Lista *bigNumBHead, Lista *list) //*Multipl
     result->anterior = NULL;
     result->proximo = NULL;
     list->primeiro = result;
+    list->ultimo = result;
 
     // if (bigNumAHead->casas != 1 && bigNumBHead->casas != 1)
     // {
@@ -261,11 +261,14 @@ void multiplicar(Lista *bigNumAHead, Lista *bigNumBHead, Lista *list) //*Multipl
         {
             for (i = 0; i < salta; i++) // a medida que as operações vão indo colocamos zeros no incio na hora da soma
             {
-                parcialResult->num = 0;
                 parcialResult->proximo = (BigNum *)malloc(sizeof(BigNum));
                 parcialResult->proximo->anterior = parcialResult;
                 parcialResult = parcialResult->proximo;
+                parcialResult->num = 0;
+
             }
+            parcialResult->proximo = NULL;
+            controllerParcialResult->ultimo = parcialResult;
         }
         while (bigNumB != NULL)
         {
@@ -296,17 +299,19 @@ void multiplicar(Lista *bigNumAHead, Lista *bigNumBHead, Lista *list) //*Multipl
         else
         {
             parcialResult = parcialResult->anterior;
+            free(parcialResult->proximo);
         }
         parcialResult->proximo = NULL;
         controllerParcialResult->ultimo = parcialResult;
 
-        BigNum *aux = (BigNum *)malloc(sizeof(BigNum));
         somar(controllerParcialResult->primeiro, list->primeiro, list); // fazemos as somas dos parcialResult
+        free(result);
         result = list->primeiro;
-        destruir(parcialResult);
+        destruir(controllerParcialResult->primeiro);
         bigNumA = bigNumA->proximo;
     }
 
+    free(controllerParcialResult);
     list->casas = contaCasas(list);
     // printf(" = ");
     // imprimeBignum(list->ultimo);
