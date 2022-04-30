@@ -213,7 +213,7 @@ void subtrair(Lista *bigNumAHead, Lista *bigNumBHead, Lista *list)
 
 void multiplicar(Lista *bigNumAHead, Lista *bigNumBHead, Lista *list) //*Multiplicação OK!
 {
-    BigNum *result = (BigNum *)malloc(sizeof(BigNum));
+    BigNum *result;
     BigNum *bigNumA;
     BigNum *bigNumB;
     Lista *controllerParcialResult = (Lista *)malloc(sizeof(Lista));
@@ -226,9 +226,7 @@ void multiplicar(Lista *bigNumAHead, Lista *bigNumBHead, Lista *list) //*Multipl
     bigNumA = bigNumAHead->primeiro;
     bigNumB = bigNumBHead->primeiro;
 
-    result->num = 0;
-    result->anterior = NULL;
-    result->proximo = NULL;
+    result = criar();
     list->primeiro = result;
     list->ultimo = result;
 
@@ -252,9 +250,8 @@ void multiplicar(Lista *bigNumAHead, Lista *bigNumBHead, Lista *list) //*Multipl
 
     while (bigNumA != NULL)
     {
-        BigNum *parcialResult = (BigNum *)malloc(sizeof(BigNum)); // resultado parcial (que sera feito a soma depois)
-        parcialResult->num = 0;
-        parcialResult->anterior = NULL;
+        BigNum *parcialResult;// resultado parcial (que sera feito a soma depois)
+        parcialResult = criar();
         controllerParcialResult->primeiro = parcialResult;
 
         if (salta > 0)
@@ -304,8 +301,8 @@ void multiplicar(Lista *bigNumAHead, Lista *bigNumBHead, Lista *list) //*Multipl
         parcialResult->proximo = NULL;
         controllerParcialResult->ultimo = parcialResult;
 
-        somar(controllerParcialResult->primeiro, list->primeiro, list); // fazemos as somas dos parcialResult
-        free(result);
+        somar(controllerParcialResult->primeiro, result, list); // fazemos as somas dos parcialResult
+        destruir(result);
         result = list->primeiro;
         destruir(controllerParcialResult->primeiro);
         bigNumA = bigNumA->proximo;
@@ -410,8 +407,6 @@ void dividir(Lista *numerador, Lista *divisor, Lista *resultController)
         free(clone);
     }
 
-    imprimeBignum(numeradorParcial->ultimo);
-    printf(" - first\n\n");
     // system("pause");
     //   printf("%d", numeradorParcial->ultimo->num);
     //   printf("%d", numeradorParcial->primeiro->num);
@@ -424,43 +419,39 @@ void dividir(Lista *numerador, Lista *divisor, Lista *resultController)
         multiplicar(divisor, multiplicador, guess);
         if (compara(guess, numeradorParcial) == 1)
         {
-            printf("Quocient= %d  ", i);
-            imprimeBignum(guess->ultimo);
-            printf(" > ");
-            imprimeBignum(numeradorParcial->ultimo);
             break;
         }
         destruir(multiplicador->primeiro);
         destruir(guess->primeiro);
     }
-    printf("B");
+    //printf("B");
 
     multi = i - 1;
     destruir(multiplicador->primeiro);
     destruir(guess->primeiro);
-    printf("C");
+    //printf("C");
 
     BigNum *aux = (BigNum *)malloc(sizeof(BigNum));
     aux = criar();
     aux->num = multi;
-    printf("D");
+    //printf("D");
     resultController->casas = 0;
     insereElemento(resultController, aux);
-    printf("E");
-    printf("\n");
-    imprimeBignum(divisor->ultimo);
-    printf("\n");
-    imprimeBignum(resultController->ultimo);
-    printf("\n");
+    //printf("E");
+    //printf("\n");
+    //imprimeBignum(divisor->ultimo);
+    //printf("\n");
+    //imprimeBignum(resultController->ultimo);
+    //printf("\n");
     multiplicar(divisor, resultController, guess);
     // printf("F");
     //  printf("\n");
-    printf("\n");
-    imprimeBignum(guess->ultimo);
-    printf("\n");
+    //printf("\n");
+    //imprimeBignum(guess->ultimo);
+    //printf("\n");
     system("pause");
     subtrair(numeradorParcial, guess, resto);
-    printf("G");
+    //printf("G");
 
     int count = 0;
 
@@ -495,14 +486,14 @@ void dividir(Lista *numerador, Lista *divisor, Lista *resultController)
 
         numeradorNum = numeradorNum->anterior;
     }
-    printf("H");
+    //printf("H");
 }
 
 void fatorial(Lista *num, Lista *numClone, Lista *result) //*Fatorial OK!
 {
-    BigNum *res = (BigNum *)malloc(sizeof(BigNum));
-    BigNum *um = (BigNum *)malloc(sizeof(BigNum));
-    BigNum *aux = (BigNum *)malloc(sizeof(BigNum));
+    BigNum *res;
+    BigNum *um;
+    //BigNum *aux = (BigNum *)malloc(sizeof(BigNum));
     Lista *controllerUm = (Lista *)malloc(sizeof(Lista));
     Lista *controllerAux = (Lista *)malloc(sizeof(Lista));
     Lista *parcialResult = (Lista *)malloc(sizeof(Lista));
@@ -547,6 +538,7 @@ void fatorial(Lista *num, Lista *numClone, Lista *result) //*Fatorial OK!
         }
     }
 
+    destruir(parcialResult->primeiro);
     destruir(controllerAux->primeiro);
     destruir(controllerUm->primeiro);
 }
