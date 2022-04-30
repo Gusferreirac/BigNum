@@ -87,8 +87,8 @@ void somar(BigNum *bigNumAHead, BigNum *bigNumBHead, Lista *list)
 void subtrair(Lista *bigNumAHead, Lista *bigNumBHead, Lista *list)
 {
     BigNum *result = (BigNum *)malloc(sizeof(BigNum));
-    BigNum *bigNumA = (BigNum *)malloc(sizeof(BigNum));
-    BigNum *bigNumB = (BigNum *)malloc(sizeof(BigNum));
+    BigNum *bigNumA;
+    BigNum *bigNumB;
     BigNum *aux = (BigNum *)malloc(sizeof(BigNum));
 
     int carrega = 0;
@@ -187,7 +187,9 @@ void subtrair(Lista *bigNumAHead, Lista *bigNumBHead, Lista *list)
     }
 
     result = result->anterior;
+    free(result->proximo);
     result->proximo = NULL;
+    list->ultimo = result;
     removerZeros(result, list); // removemos os zeros a esquerda e aplicamos o sinal negativo no que sobrou
     if (negative == 1)
     {
@@ -204,6 +206,9 @@ void subtrair(Lista *bigNumAHead, Lista *bigNumBHead, Lista *list)
     // printf("Resultado:");
     // imprimeBignum(list->ultimo);
     // printf("\n\n");
+
+    free(aux);
+
 }
 
 void multiplicar(Lista *bigNumAHead, Lista *bigNumBHead, Lista *list) //*Multiplicação OK!

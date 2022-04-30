@@ -19,9 +19,9 @@ int main()
     controllerA->casas = intToBignum(a, controllerA);
     //controllerAClone->casas = intToBignum(a, controllerAClone);
     controllerB->casas = intToBignum(b, controllerB);
-    imprimeBignum(controllerA->ultimo);
+    //imprimeBignum(controllerA->ultimo);
 
-    //  subtrair(controllerA, controllerB, soma, controllerC);
+    subtrair(controllerA, controllerB, controllerC);
     //  multiplicar(controllerA, controllerB, soma, controllerC);
     // fatorial(controllerA, controllerAClone, controllerC);
     // incrementa(controllerA);
@@ -29,15 +29,16 @@ int main()
     // dividir(controllerA, controllerB, controllerC);
     //  dividir(controllerC, controllerB, controllerC);
     //   controllerC->primeiro->anterior = NULL;
-    //imprimeBignum(controllerC->ultimo);
+    imprimeBignum(controllerC->ultimo);
 
     destruir(controllerA->primeiro);
     destruir(controllerB->primeiro);
-    freeLista(controllerA);
-    freeLista(controllerAClone);
-    freeLista(controllerB);
-    freeLista(controllerC);
+    destruir(controllerC->primeiro);
+    free(controllerA);
+    free(controllerAClone);
+    free(controllerB);
+    free(controllerC);
 
-    system("pause");
+    //system("pause");
     return 0;
 }

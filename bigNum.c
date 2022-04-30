@@ -61,7 +61,7 @@ int intToBignum(int num, Lista *list)
 
     no->proximo = NULL;
     list->ultimo = no;
-    freeNo(no);
+    //freeNo(no);
     return tam;
 }
 
