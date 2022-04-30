@@ -17,15 +17,17 @@ int main()
     scanf("%d %d", &a, &b);
 
     controllerA->casas = intToBignum(a, controllerA);
-    //controllerAClone->casas = intToBignum(a, controllerAClone);
+    controllerAClone->casas = intToBignum(a, controllerAClone);
     controllerB->casas = intToBignum(b, controllerB);
     //imprimeBignum(controllerA->ultimo);
 
     //somar(controllerA->primeiro, controllerB->primeiro, controllerC);
-    multiplicar(controllerA, controllerB,controllerC);
+    //multiplicar(controllerA, controllerB,controllerC);
     //dividir(controllerA,controllerB,controllerC);
     //subtrair(controllerA, controllerB,controllerC);
-    //fatorial(controllerA, controllerAClone, controllerC);
+    fatorial(controllerA, controllerAClone, controllerC);
+    //clone(controllerA,controllerC);
+    //clone(controllerB,controllerC);
     // incrementa(controllerA);
 
     // dividir(controllerA, controllerB, controllerC);
@@ -34,6 +36,7 @@ int main()
     imprimeBignum(controllerC->ultimo);
 
     destruir(controllerA->primeiro);
+    destruir(controllerAClone->primeiro);
     destruir(controllerB->primeiro);
     destruir(controllerC->primeiro);
     free(controllerA);

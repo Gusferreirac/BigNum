@@ -203,7 +203,7 @@ void insereElemento(Lista *controller, BigNum *num)
 void clone(Lista *a, Lista *b)
 {
     BigNum *num;
-    BigNum *numClone = (BigNum *)malloc(sizeof(BigNum));
+    BigNum *numClone;
 
     num = a->primeiro;
 
@@ -212,6 +212,7 @@ void clone(Lista *a, Lista *b)
 
     while (num != NULL)
     {
+        //printf("A");
         numClone->num = num->num;
         num = num->proximo;
         numClone->proximo = (BigNum *)malloc(sizeof(BigNum));

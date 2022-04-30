@@ -192,6 +192,7 @@ void subtrair(Lista *bigNumAHead, Lista *bigNumBHead, Lista *list)
     free(result->proximo);
     result->proximo = NULL;
     list->ultimo = result;
+    list->casas = contaCasas(list);
     removerZeros(result, list); // removemos os zeros a esquerda e aplicamos o sinal negativo no que sobrou
     if (negative == 1)
     {
@@ -491,54 +492,70 @@ void dividir(Lista *numerador, Lista *divisor, Lista *resultController)
 
 void fatorial(Lista *num, Lista *numClone, Lista *result) //*Fatorial OK!
 {
-    BigNum *res;
+    //BigNum *res;
     BigNum *um;
-    //BigNum *aux = (BigNum *)malloc(sizeof(BigNum));
+    BigNum *aux;
     Lista *controllerUm = (Lista *)malloc(sizeof(Lista));
     Lista *controllerAux = (Lista *)malloc(sizeof(Lista));
+    Lista *controllerAuxClone = (Lista *)malloc(sizeof(Lista));
     Lista *parcialResult = (Lista *)malloc(sizeof(Lista));
     int end = 0;
 
-    res = criar();
-    res->num = 1;
+    //res = criar();
+    //res->num = 1;
     um = criar();
     um->num = 1;
 
     controllerUm->primeiro = um;
     controllerUm->ultimo = um;
     controllerUm->casas = 1;
-    controllerAux->casas = 1;
 
-    result->primeiro = res;
+    //result->primeiro = res;
 
     subtrair(num, controllerUm, controllerAux);
     multiplicar(controllerAux, numClone, result);
-    clone(result, parcialResult);
-    // printf(" = ");
+    //imprimeBignum(controllerAux->ultimo);
+    //printf("\n");
     // imprimeBignum(result->ultimo);
     // printf("\n");
+    //aux = controllerAuxClone->primeiro;
+
     while (end != 1)
     {
-        subtrair(controllerAux, controllerUm, controllerAux);
+        //imprimeBignum(controllerAux->ultimo);
+        //printf("\n");
+
+        //printf("SUAVE");
+        //destruir(controllerAux->primeiro);
+        subtrair(controllerAux, controllerUm, controllerAuxClone); //não estou liberando controllerAux antes de escrever no controllerAux
+        destruir(controllerAux->primeiro);
+        clone(controllerAuxClone, controllerAux);
+        destruir(controllerAuxClone->primeiro);
+        //destruir(controllerAuxClone->primeiro);
 
         // printf("ControllerAux: ");
-        // imprimeBignum(controllerAux->ultimo);
-        // printf("\n");
+       
         if (controllerAux->primeiro->num == 0 && controllerAux->primeiro == controllerAux->ultimo)
         {
             end = 1;
         }
         else
         {
-            multiplicar(controllerAux, parcialResult, result);
             clone(result, parcialResult);
+            destruir(result->primeiro);
+            multiplicar(controllerAux, parcialResult, result);
+            destruir(parcialResult->primeiro);
             // printf(" = ");
             // imprimeBignum(result->ultimo);
             // printf("\n");
         }
     }
 
-    destruir(parcialResult->primeiro);
+    //destruir(parcialResult->primeiro);
     destruir(controllerAux->primeiro);
     destruir(controllerUm->primeiro);
+    free(parcialResult);
+    free(controllerAux);
+    free(controllerAuxClone);
+    free(controllerUm);
 }
