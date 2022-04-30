@@ -7,8 +7,8 @@
 void somar(BigNum *bigNumAHead, BigNum *bigNumBHead, Lista *list)
 {
     BigNum *result = (BigNum *)malloc(sizeof(BigNum));
-    BigNum *bigNumA = (BigNum *)malloc(sizeof(BigNum));
-    BigNum *bigNumB = (BigNum *)malloc(sizeof(BigNum));
+    BigNum *bigNumA;
+    BigNum *bigNumB;
     int carrega = 0;
 
     bigNumA = bigNumAHead;
@@ -79,6 +79,7 @@ void somar(BigNum *bigNumAHead, BigNum *bigNumBHead, Lista *list)
     if (result->num == 0)
     {
         result = result->anterior; // tirando o zero a esquerda
+        free(result->proximo);
     }
     result->proximo = NULL;
     list->ultimo = result;
