@@ -325,6 +325,7 @@ void dividir(Lista *numerador, Lista *divisor, Lista *resultController)
     Lista *multiplicador = (Lista *)malloc(sizeof(Lista));
     Lista *guess = (Lista *)malloc(sizeof(Lista));
     Lista *resto = (Lista *)malloc(sizeof(Lista));
+    Lista *restoClone = (Lista *)malloc(sizeof(Lista));
 
     int i, multi, end = 0, maior = 0, menor = 0;
 
@@ -402,7 +403,7 @@ void dividir(Lista *numerador, Lista *divisor, Lista *resultController)
         // imprimeBignum(numeradorParcial->ultimo);
         // printf("  ");
         numeradorNum = numeradorNum->anterior;
-        free(clone);
+        //free(clone);
     }
 
     // imprimeBignum(numeradorParcial->ultimo);
@@ -452,15 +453,18 @@ void dividir(Lista *numerador, Lista *divisor, Lista *resultController)
     //printf("\n");
     //system("pause");
     subtrair(numeradorParcial, guess, resto);
+    destruir(guess->primeiro);
     //printf("G");
 
     int count = 0;
 
     while (numeradorNum != NULL)
     {
+        clone = criar();
         clone->num = numeradorNum->num;
         //printf("  %d num  ", numeradorNum->num);
         insereNoInicio(resto, clone); //tem que inserir no inicio
+        removerZeros(resto->ultimo, resto);
 
         for (i = 0; i < 10; i++)
         {
@@ -469,11 +473,12 @@ void dividir(Lista *numerador, Lista *divisor, Lista *resultController)
             // imprimeBignum(resto->ultimo);
             // printf(" ");
             // imprimeBignum(guess->ultimo);
+            // printf("\n");
+            resto->casas = contaCasas(resto);
             if (compara(guess, resto) == 1)
             {
                 break;
             }
-            //printf("\n");
             destruir(multiplicador->primeiro);
             destruir(guess->primeiro);
         }
@@ -488,19 +493,25 @@ void dividir(Lista *numerador, Lista *divisor, Lista *resultController)
 
         insereNoInicio(resultController, aux);
         multiplicar(divisor, resultController, guess);
-        subtrair(resto, guess, resto);
+        subtrair(resto, guess, restoClone);
+        destruir(guess->primeiro);
+        destruir(resto->primeiro);
+        clonar(restoClone, resto);
+        destruir(restoClone->primeiro);
 
         numeradorNum = numeradorNum->anterior;
     }
 
+    removerZeros(resultController->ultimo, resultController);
+
     destruir(numeradorParcial->primeiro);
-    destruir(guess->primeiro);
     destruir(resto->primeiro);
     free(numeradorParcial);
     free(guess);
     free(quocient);
     free(multiplicador);
     free(resto);
+    free(restoClone);
     //printf("H");
 }
 
@@ -543,7 +554,7 @@ void fatorial(Lista *num, Lista *numClone, Lista *result) //*Fatorial OK!
         //destruir(controllerAux->primeiro);
         subtrair(controllerAux, controllerUm, controllerAuxClone); //não estou liberando controllerAux antes de escrever no controllerAux
         destruir(controllerAux->primeiro);
-        clone(controllerAuxClone, controllerAux);
+        clonar(controllerAuxClone, controllerAux);
         destruir(controllerAuxClone->primeiro);
         //destruir(controllerAuxClone->primeiro);
 
@@ -555,7 +566,7 @@ void fatorial(Lista *num, Lista *numClone, Lista *result) //*Fatorial OK!
         }
         else
         {
-            clone(result, parcialResult);
+            clonar(result, parcialResult);
             destruir(result->primeiro);
             multiplicar(controllerAux, parcialResult, result);
             destruir(parcialResult->primeiro);

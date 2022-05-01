@@ -137,7 +137,7 @@ int compara(Lista *a, Lista *b)
 {
     // printf("NumeradorParcial ");
     // imprimeBignum(b->ultimo);
-    // printf("\n\n");
+    //printf("%d  %d\n", a->casas, b->casas);
     if (b->casas < a->casas)
     {
         return 1;
@@ -216,7 +216,7 @@ void insereNoInicio(Lista *controller, BigNum *num)
 }
 
 // Clona a em b
-void clone(Lista *a, Lista *b)
+void clonar(Lista *a, Lista *b)
 {
     BigNum *num;
     BigNum *numClone;
@@ -263,6 +263,7 @@ void removerZeros(BigNum *bigNum, Lista *controller)
         }
         bigNum = bigNum->anterior; // enquanto não acha um num != 0 ou chega no inicio da lista removemos os 0
         free(bigNum->proximo);
+        controller->casas--;
     }
     controller->ultimo = bigNum;
 }

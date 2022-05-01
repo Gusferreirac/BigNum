@@ -16,7 +16,7 @@ typedef struct lista
 } Lista;
 
 BigNum *criar();
-void clone(Lista *a, Lista *b);
+void clonar(Lista *a, Lista *b);
 int intToBignum(int num, Lista *list);
 int contaCasas(Lista *li);
 void incrementa(Lista *li);
