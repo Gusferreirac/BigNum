@@ -10,7 +10,7 @@ int main()
     char arquivo[10], *line;
     BigNum *bigNum1, *bigNum2, *bigNum3;
     Lista *controllerA, *controllerAClone, *controllerB, *controllerC, *controllerD, *controllerE, *result, *resultClone;
-    FILE *arqIN, *arqOUT;
+    FILE *arqIN;
 
     controllerA = (Lista *)malloc(sizeof(Lista));
     controllerAClone = (Lista *)malloc(sizeof(Lista));

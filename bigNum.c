@@ -243,11 +243,19 @@ void clonar(Lista *a, Lista *b)
 
 void imprimeBignum(BigNum *Num)
 {
+    FILE *arqOut = fopen("output.txt","w");
+
+    if(arqOut == NULL){
+        printf("Ocorreu um erro ao abrir o arquivo de saída!");
+        return;
+    }
+
     BigNum *no = Num;
     // printf("\n");
     while (no != NULL)
     {
-        printf("%d", no->num);
+        fprintf(arqOut,"%d",no->num);
+        //printf("%d", no->num);
         no = no->anterior;
     }
 }
