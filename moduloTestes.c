@@ -5,12 +5,13 @@
 
 int main()
 {
-    Lista *controllerA, *controllerB, *controllerC, *controllerAClone;
+    Lista *controllerA, *controllerB, *controllerC, *controllerAClone, *controllerD;
 
     controllerA = (Lista *)malloc(sizeof(Lista));
     controllerAClone = (Lista *)malloc(sizeof(Lista));
     controllerB = (Lista *)malloc(sizeof(Lista));
     controllerC = (Lista *)malloc(sizeof(Lista));
+    controllerD = (Lista *)malloc(sizeof(Lista));
     int a, b;
     int i;
 
@@ -24,9 +25,9 @@ int main()
     //somar(controllerA->primeiro, controllerB->primeiro, controllerC);
     //multiplicar(controllerA, controllerB,controllerC);
     //compara(controllerA, controllerB);
-    dividir(controllerA,controllerB,controllerC);
+    fatorial(controllerA, controllerAClone, controllerC);
+    dividir(controllerC,controllerB,controllerD);
     //subtrair(controllerA, controllerB,controllerC);
-    //fatorial(controllerA, controllerAClone, controllerC);
     //clone(controllerA,controllerC);
     //clone(controllerB,controllerC);
     // incrementa(controllerA);
@@ -34,16 +35,18 @@ int main()
     // dividir(controllerA, controllerB, controllerC);
     //  dividir(controllerC, controllerB, controllerC);
     //   controllerC->primeiro->anterior = NULL;
-    imprimeBignum(controllerC->ultimo);
+    imprimeBignum(controllerD->ultimo);
 
     destruir(controllerA->primeiro);
     destruir(controllerAClone->primeiro);
     destruir(controllerB->primeiro);
     destruir(controllerC->primeiro);
+    destruir(controllerD->primeiro);
     free(controllerA);
     free(controllerAClone);
     free(controllerB);
     free(controllerC);
+    free(controllerD);
 
     //system("pause");
     return 0;

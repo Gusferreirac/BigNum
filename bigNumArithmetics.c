@@ -124,12 +124,22 @@ void subtrair(Lista *bigNumAHead, Lista *bigNumBHead, Lista *list)
                 {
                     negative = 1;
                     break;
+                }else if(auxA->num > auxB->num){
+                    break;
                 }
                 auxA = auxA->anterior;
                 auxB = auxB->anterior;
             }
         }
     }
+
+    // printf("\n\n");
+    // imprimeBignum(bigNumAHead->ultimo);
+    // printf(" (-) ");
+    // imprimeBignum(bigNumBHead->ultimo);
+    // printf("   negative = %d",negative);
+    // printf("\n\n");
+
 
     // fim da verificação
 
@@ -335,11 +345,15 @@ void dividir(Lista *numerador, Lista *divisor, Lista *resultController)
 
     numeradorNum = numerador->ultimo;
 
+    // imprimeBignum(numerador->ultimo);
+    // printf(" dividido por ");
+    // imprimeBignum(divisor->ultimo);
+
     //---------------------------VERIFICA SE DIVISOR > NUMERADOR-------------------------------
     //-------------------------------OU SE DIVISOR = NUMERADOR---------------------------------
     if (numerador->casas < divisor->casas)
     {
-        //printf("1");
+        //printf("1 %d < %d",numerador->casas, divisor->casas);
         maior = 1;
     }
     else if (numerador->casas == divisor->casas)
@@ -452,6 +466,8 @@ void dividir(Lista *numerador, Lista *divisor, Lista *resultController)
     //imprimeBignum(guess->ultimo);
     //printf("\n");
     //system("pause");
+    numeradorParcial->casas = contaCasas(numeradorParcial);
+    guess->casas = contaCasas(guess);
     subtrair(numeradorParcial, guess, resto);
     destruir(guess->primeiro);
     //printf("G");
@@ -466,15 +482,19 @@ void dividir(Lista *numerador, Lista *divisor, Lista *resultController)
         insereNoInicio(resto, clone); //tem que inserir no inicio
         removerZeros(resto->ultimo, resto);
 
-        for (i = 0; i < 10; i++)
+        for (i = 0; i <= 10; i++)
         {
             multiplicador->casas = intToBignum(i, multiplicador);
             multiplicar(divisor, multiplicador, guess);
+            // imprimeBignum(guess->ultimo);
+            // printf(" ");
+            removerZeros(guess->ultimo,guess);
             // imprimeBignum(resto->ultimo);
             // printf(" ");
             // imprimeBignum(guess->ultimo);
             // printf("\n");
             resto->casas = contaCasas(resto);
+            guess->casas = contaCasas(guess);
             if (compara(guess, resto) == 1)
             {
                 break;
@@ -490,10 +510,23 @@ void dividir(Lista *numerador, Lista *divisor, Lista *resultController)
         BigNum *aux;
         aux = criar();
         aux->num = multi;
+        multiplicador->casas = intToBignum(i-1, multiplicador);
 
         insereNoInicio(resultController, aux);
-        multiplicar(divisor, resultController, guess);
+        multiplicar(divisor, multiplicador, guess);
+        destruir(multiplicador->primeiro);
+        // printf("\n\n");
+        // imprimeBignum(resto->ultimo);
+        // printf(" - ");
+        // imprimeBignum(guess->ultimo);
+        // printf("\n\n");
+        removerZeros(guess->ultimo,guess);
+        resto->casas = contaCasas(resto);
+        guess->casas = contaCasas(guess);
         subtrair(resto, guess, restoClone);
+        // printf("\n\n");
+        // imprimeBignum(restoClone->ultimo);
+        // printf("\n\n");
         destruir(guess->primeiro);
         destruir(resto->primeiro);
         clonar(restoClone, resto);
