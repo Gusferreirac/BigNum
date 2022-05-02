@@ -44,7 +44,6 @@ int intToBignum(int num, Lista *list)
     list->primeiro = no;
 
     sprintf(buffer, "%d", num);
-    // itoa(num, buffer, 10);
     reverseString(buffer);
     tam = strlen(buffer);
 
@@ -61,7 +60,6 @@ int intToBignum(int num, Lista *list)
 
     no->proximo = NULL;
     list->ultimo = no;
-    //freeNo(no);
     return tam;
 }
 
@@ -135,9 +133,6 @@ void incrementa(Lista *li)
 // Se a > b retorna 1 caso nao retorna 0
 int compara(Lista *a, Lista *b)
 {
-    // printf("NumeradorParcial ");
-    // imprimeBignum(b->ultimo);
-    //printf("%d  %d\n", a->casas, b->casas);
     if (b->casas < a->casas)
     {
         return 1;
@@ -172,7 +167,6 @@ int compara(Lista *a, Lista *b)
                 auxA = auxA->anterior;
                 auxB = auxB->anterior;
             }
-
         }
     }
 
@@ -228,7 +222,6 @@ void clonar(Lista *a, Lista *b)
 
     while (num != NULL)
     {
-        //printf("A");
         numClone->num = num->num;
         num = num->proximo;
         numClone->proximo = (BigNum *)malloc(sizeof(BigNum));
@@ -243,19 +236,18 @@ void clonar(Lista *a, Lista *b)
 
 void imprimeBignum(BigNum *Num)
 {
-    FILE *arqOut = fopen("output.txt","w");
+    FILE *arqOut = fopen("output.txt", "w");
 
-    if(arqOut == NULL){
+    if (arqOut == NULL)
+    {
         printf("Ocorreu um erro ao abrir o arquivo de saída!");
         return;
     }
 
     BigNum *no = Num;
-    // printf("\n");
     while (no != NULL)
     {
-        fprintf(arqOut,"%d",no->num);
-        //printf("%d", no->num);
+        fprintf(arqOut, "%d", no->num);
         no = no->anterior;
     }
 }
@@ -276,13 +268,15 @@ void removerZeros(BigNum *bigNum, Lista *controller)
     controller->ultimo = bigNum;
 }
 
-void freeLista(Lista *li){
+void freeLista(Lista *li)
+{
     free(li->primeiro);
     free(li->ultimo);
     free(li);
 }
 
-void freeNo(BigNum *no){
+void freeNo(BigNum *no)
+{
     free(no->anterior);
     free(no->proximo);
     free(no);

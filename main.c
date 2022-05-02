@@ -21,12 +21,6 @@ int main()
     result = (Lista *)malloc(sizeof(Lista));
     resultClone = (Lista *)malloc(sizeof(Lista));
 
-    // bigNum1 = criar();
-    // controllerA->primeiro = bigNum1;
-
-    // bigNum2 = criar();
-    // controllerB->ultimo;
-
     gets(arquivo);
 
     arqIN = fopen(arquivo, "r");
@@ -51,66 +45,41 @@ int main()
 
         i++;
 
-        //printf("A ");
-        controllerA->casas = intToBignum(num1, controllerA); // controllerA = n;
+        controllerA->casas = intToBignum(num1, controllerA);           // controllerA = n;
         controllerAClone->casas = intToBignum(num1, controllerAClone); // controllerA = n;
-        controllerB->casas = intToBignum(num2, controllerB); // controllerA = m
-        //resultClone->casas = intToBignum(0,resultClone);
+        controllerB->casas = intToBignum(num2, controllerB);           // controllerA = m
 
-        //printf("B ");
-        //imprimeBignum(controllerA->ultimo);
-        //printf("   ");
         subtrair(controllerAClone, controllerB, controllerC); // controllerC = n-m
         destruir(controllerAClone->primeiro);
-        //imprimeBignum(controllerA->ultimo);
-        //printf("   ");
-        //printf("C ");
         clonar(controllerC, controllerD); // controllerD = n-m
-        //printf("D ");
+
         fatorial(controllerC, controllerD, controllerE); // controllerE = (n-m)!
-        //printf("E ");
         destruir(controllerC->primeiro);
         destruir(controllerD->primeiro);
-        //printf("F ");
+
         clonar(controllerB, controllerC); // controllerC = m
-        //printf("G ");
+
         fatorial(controllerB, controllerC, controllerD); // controllerD = m!
-        //printf("H ");
         destruir(controllerB->primeiro);
         destruir(controllerC->primeiro);
-        //printf("I ");
+
         multiplicar(controllerE, controllerD, controllerC); // controllerC = m!(n-m)!
-        //printf("J ");
         destruir(controllerD->primeiro);
         destruir(controllerE->primeiro);
-        //printf("K ");
-        clonar(controllerA, controllerD); // controllerD = n
-        //printf("L ");
-        // imprimeBignum(controllerA->ultimo);
-        // printf("   ");
+
+        clonar(controllerA, controllerD);                // controllerD = n
         fatorial(controllerA, controllerD, controllerE); // controllerE = n!
-        // imprimeBignum(controllerE->ultimo);
-        // printf("   ");
-        //printf("M ");
         destruir(controllerD->primeiro);
         destruir(controllerA->primeiro);
-        //printf("N ");
+
         controllerC->casas = contaCasas(controllerC);
         controllerE->casas = contaCasas(controllerE);
         dividir(controllerE, controllerC, controllerD); // controllerD = n!/m!(n-m)!
-        //printf("O ");
 
         if (i != 1)
         {
             if ((i % 2) == 0)
-            {   
-                // printf("%d", result->primeiro->num);
-                // printf("%d", controllerD->primeiro->num);
-                // imprimeBignum(result->ultimo);
-                // printf("  ");
-                // imprimeBignum(controllerD->ultimo);
-                // printf("\n");
-
+            {
                 result->casas = contaCasas(result);
                 controllerD->casas = contaCasas(controllerD);
                 subtrair(result, controllerD, resultClone);
@@ -131,13 +100,10 @@ int main()
             clonar(controllerD, result);
         }
 
-        //destruir(controllerA->primeiro);
-        //destruir(controllerB->primeiro);
         destruir(controllerC->primeiro);
         destruir(controllerD->primeiro);
         destruir(controllerE->primeiro);
         fscanf(arqIN, "%d%d", &num1, &num2);
-        //printf("X\n");
     }
 
     imprimeBignum(result->ultimo);
