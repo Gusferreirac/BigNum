@@ -247,7 +247,7 @@ void imprimeBignum(BigNum *Num)
     // printf("\n");
     while (no != NULL)
     {
-        printf("%d ", no->num);
+        printf("%d", no->num);
         no = no->anterior;
     }
 }

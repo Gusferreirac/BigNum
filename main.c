@@ -21,7 +21,6 @@ int main()
     result = (Lista *)malloc(sizeof(Lista));
     resultClone = (Lista *)malloc(sizeof(Lista));
 
-    resultClone->casas = intToBignum(0,resultClone);
     // bigNum1 = criar();
     // controllerA->primeiro = bigNum1;
 
@@ -56,6 +55,8 @@ int main()
         controllerA->casas = intToBignum(num1, controllerA); // controllerA = n;
         controllerAClone->casas = intToBignum(num1, controllerAClone); // controllerA = n;
         controllerB->casas = intToBignum(num2, controllerB); // controllerA = m
+        //resultClone->casas = intToBignum(0,resultClone);
+
         //printf("B ");
         //imprimeBignum(controllerA->ultimo);
         //printf("   ");
@@ -115,7 +116,7 @@ int main()
                 subtrair(result, controllerD, resultClone);
                 destruir(result->primeiro);
                 clonar(resultClone, result);
-                destruir(resultClone->ultimo);
+                destruir(resultClone->primeiro);
             }
             else
             {
@@ -140,6 +141,7 @@ int main()
     }
 
     imprimeBignum(result->ultimo);
+
     destruir(result->primeiro);
     free(controllerA);
     free(controllerAClone);
